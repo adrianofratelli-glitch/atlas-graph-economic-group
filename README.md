@@ -170,3 +170,7 @@ backend/venv/bin/python tests/live_hardening.py
 The last command creates and removes its own `graph_resilience_test_<uuid>`
 database. It does not reset the demo dataset. See `docs/resilience-validation.md`
 for the validation scope and remaining limits.
+
+## License
+
+MIT, see [LICENSE](LICENSE).
