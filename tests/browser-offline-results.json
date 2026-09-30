@@ -1,0 +1,46 @@
+[
+  {
+    "test": "double click gera uma única escrita",
+    "passed": true
+  },
+  {
+    "test": "encerrar revisão libera a interface",
+    "passed": true
+  },
+  {
+    "test": "escrita sem resposta pode ser reconciliada",
+    "passed": true
+  },
+  {
+    "test": "resultado antigo não reaparece ao editar busca",
+    "passed": true
+  },
+  {
+    "test": "texto hostil é renderizado como texto",
+    "passed": true
+  },
+  {
+    "test": "índice vetorial ausente degrada só o painel",
+    "passed": true
+  },
+  {
+    "test": "429 de carteira tem mensagem e não derruba grafo",
+    "passed": true
+  },
+  {
+    "test": "navegação de abas por teclado",
+    "passed": true
+  },
+  {
+    "test": "link de pular conteúdo move o foco",
+    "passed": true
+  },
+  {
+    "test": "abas não sobrepõem seus textos em 360px",
+    "passed": true
+  },
+  {
+    "test": "sem exceções JavaScript nas falhas simuladas",
+    "passed": true
+  }
+]

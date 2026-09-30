@@ -1,0 +1,45 @@
+{
+  "measured_at": "2026-09-30T08:47:29.290Z",
+  "checks": [
+    {
+      "test": "auditoria carrega e todos os grupos são navegáveis",
+      "passed": true
+    },
+    {
+      "test": "plano real e membros são inspecionáveis",
+      "passed": true
+    },
+    {
+      "test": "limite parcial e comparação pendente estão explícitos",
+      "passed": true
+    },
+    {
+      "test": "página de evidências sem overflow 1440",
+      "passed": true
+    },
+    {
+      "test": "página de evidências sem overflow 768",
+      "passed": true
+    },
+    {
+      "test": "página de evidências sem overflow 360",
+      "passed": true
+    },
+    {
+      "test": "JSON publicado está acessível",
+      "passed": true
+    },
+    {
+      "test": "falha do relatório tem recuperação",
+      "passed": true
+    },
+    {
+      "test": "JSON inválido não derruba a página",
+      "passed": true
+    },
+    {
+      "test": "sem exceções JavaScript",
+      "passed": true
+    }
+  ]
+}

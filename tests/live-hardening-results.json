@@ -1,0 +1,93 @@
+{
+  "checks": [
+    {
+      "test": "change stream conectado",
+      "passed": true
+    },
+    {
+      "test": "profundidade parcial declarada",
+      "passed": true
+    },
+    {
+      "test": "consulta parcial n\u00e3o grava",
+      "passed": true
+    },
+    {
+      "test": "grupo completo e soma",
+      "passed": true
+    },
+    {
+      "test": "sem arestas \u00f3rf\u00e3s",
+      "passed": true
+    },
+    {
+      "test": "exposi\u00e7\u00e3o alterada invalida comprovante",
+      "passed": true
+    },
+    {
+      "test": "recusa mant\u00e9m estado limpo",
+      "passed": true
+    },
+    {
+      "test": "seis aberturas concorrentes idempotentes",
+      "passed": true
+    },
+    {
+      "test": "um \u00fanico caso e valores do snapshot",
+      "passed": true
+    },
+    {
+      "test": "todas as marcas at\u00f4micas",
+      "passed": true
+    },
+    {
+      "test": "outro comprovante sobreposto recebe 409",
+      "passed": true
+    },
+    {
+      "test": "evento real de abertura agrega quatro empresas",
+      "passed": true
+    },
+    {
+      "test": "encerramento confirmado",
+      "passed": true
+    },
+    {
+      "test": "evento real de encerramento",
+      "passed": true
+    },
+    {
+      "test": "nenhuma marca remanescente",
+      "passed": true
+    },
+    {
+      "test": "encerramento idempotente",
+      "passed": true
+    },
+    {
+      "test": "comprovante encerrado n\u00e3o reabre",
+      "passed": true
+    },
+    {
+      "test": "caso ausente retorna 404",
+      "passed": true
+    },
+    {
+      "test": "teto de n\u00f3s respeitado",
+      "passed": true
+    },
+    {
+      "test": "truncamento preserva sujeito",
+      "passed": true
+    },
+    {
+      "test": "truncamento bloqueia revis\u00e3o",
+      "passed": true
+    },
+    {
+      "test": "ciclo termina com cobertura parcial",
+      "passed": true
+    }
+  ],
+  "isolated_database_removed": true
+}

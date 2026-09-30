@@ -1,0 +1,62 @@
+[
+  {
+    "test": "resumo e consulta parcial bloqueiam revisão",
+    "passed": true
+  },
+  {
+    "test": "grupo completo habilita revisão",
+    "passed": true
+  },
+  {
+    "test": "evidência aponta os vínculos no grafo",
+    "passed": true
+  },
+  {
+    "test": "sem overflow horizontal 1440",
+    "passed": true
+  },
+  {
+    "test": "abas acessíveis 1440",
+    "passed": true
+  },
+  {
+    "test": "sem overflow horizontal 768",
+    "passed": true
+  },
+  {
+    "test": "abas acessíveis 768",
+    "passed": true
+  },
+  {
+    "test": "sem overflow horizontal 360",
+    "passed": true
+  },
+  {
+    "test": "abas acessíveis 360",
+    "passed": true
+  },
+  {
+    "test": "métrica sem contagem fictícia de negócios",
+    "passed": true
+  },
+  {
+    "test": "simulação de perfil identificada",
+    "passed": true
+  },
+  {
+    "test": "resposta atrasada não troca o grupo atual",
+    "passed": true
+  },
+  {
+    "test": "sem exceções JavaScript no fluxo ao vivo",
+    "passed": true
+  },
+  {
+    "test": "offline exibe erro e recuperação",
+    "passed": true
+  },
+  {
+    "test": "recuperação após offline",
+    "passed": true
+  }
+]
