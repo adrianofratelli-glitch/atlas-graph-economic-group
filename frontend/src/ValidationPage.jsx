@@ -15,16 +15,16 @@ function Curve({ rows }) {
     <svg viewBox="0 0 650 275" role="img" aria-labelledby="curve-title curve-desc">
       <title id="curve-title">Latência p95 por profundidade e ramificação</title>
       <desc id="curve-desc">Uma linha para cada número de filhos por empresa. Valores exatos e quantidade de vínculos na tabela seguinte.</desc>
-      {[0,.5,1].map(r => <g key={r}><line x1="64" x2="606" y1={y(r*ceiling)} y2={y(r*ceiling)} stroke="#3d4f58"/><text x="56" y={y(r*ceiling)+4} textAnchor="end">{number(r*ceiling)}</text></g>)}
+      {[0,.5,1].map(r => <g key={r}><line x1="64" x2="606" y1={y(r*ceiling)} y2={y(r*ceiling)} stroke="#2a424d"/><text x="56" y={y(r*ceiling)+4} textAnchor="end">{number(r*ceiling)}</text></g>)}
       {[1,2,4,6].map(d => <text key={d} x={x(d)} y="247" textAnchor="middle">{d}</text>)}
       <text x="64" y="18">p95 · ms, incluindo rede</text><text x="335" y="270" textAnchor="middle">Níveis societários</text>
       {[1,2,3].map((branch,i) => {
         const points = regular.filter(r => r.branching === branch)
-        const color = ['#00ed64','#49b6ff','#ffc010'][i]
+        const color = ['#00ed64','#49b6ff','#ffad00'][i]
         return <g key={branch}><polyline points={points.map(r => `${x(r.depth)},${y(r.p95_ms)}`).join(' ')} fill="none" stroke={color} strokeWidth="2.5"/>{points.map(r => <circle key={r.depth} cx={x(r.depth)} cy={y(r.p95_ms)} r="4" fill={color}><title>{branch} filhos, {r.depth} níveis: {number(r.p95_ms)} ms</title></circle>)}</g>
       })}
     </svg>
-    <figcaption><span style={{color:'#00ed64'}}>● 1 filho</span><span style={{color:'#49b6ff'}}>● 2 filhos</span><span style={{color:'#ffc010'}}>● 3 filhos</span></figcaption>
+    <figcaption><span style={{color:'#00ed64'}}>● 1 filho</span><span style={{color:'#49b6ff'}}>● 2 filhos</span><span style={{color:'#ffad00'}}>● 3 filhos</span></figcaption>
   </figure>
 }
 

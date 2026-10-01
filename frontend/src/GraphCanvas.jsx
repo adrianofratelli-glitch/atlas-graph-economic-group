@@ -6,8 +6,8 @@ import { t } from './theme'
 // A cor da aresta diz de que tipo é a participação: pessoa física entrando no
 // capital é uma leitura, holding controlando subsidiária é outra.
 const EDGE_COLOR = {
-  corporate: '#0498ec',
-  individual: '#ffc010',
+  corporate: '#3d9dff',
+  individual: '#ffad00',
 }
 
 // Atenuação do que não é vizinho. Não é decoração: é o padrão de "revelar

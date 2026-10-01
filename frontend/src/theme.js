@@ -1,14 +1,14 @@
 // Tokens canônicos do POV_UI_DESIGN_SYSTEM.md. Não divergir sem sincronizar as onze PoVs.
 export const t = {
-  bgPrimary: '#001e2b',
-  bgSecondary: '#112733',
-  bgCard: '#1c2d38',
-  borderSubtle: '#3d4f58',
-  textPri: '#e8edeb',
-  textSec: '#c1c7c6',
-  textMuted: '#889397',
+  bgPrimary: '#061621',
+  bgSecondary: '#001e2b',
+  bgCard: '#0a2633',
+  borderSubtle: '#2a424d',
+  textPri: '#fdfff5',
+  textSec: '#cdd5ce',
+  textMuted: '#9ea2a1',
   accent: '#00ed64',
-  link: '#0498ec',
-  warning: '#ffc010',
+  link: '#3d9dff',
+  warning: '#ffad00',
   danger: '#ff6960',
 }

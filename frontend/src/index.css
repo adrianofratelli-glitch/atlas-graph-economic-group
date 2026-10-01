@@ -1,14 +1,14 @@
 :root {
-  --bg-primary: #001e2b;
-  --bg-secondary: #112733;
-  --bg-card: #1c2d38;
-  --border-subtle: #3d4f58;
-  --text-pri: #e8edeb;
-  --text-sec: #c1c7c6;
-  --text-muted: #889397;
+  --bg-primary: #061621;
+  --bg-secondary: #001e2b;
+  --bg-card: #0a2633;
+  --border-subtle: #2a424d;
+  --text-pri: #fdfff5;
+  --text-sec: #cdd5ce;
+  --text-muted: #9ea2a1;
   --accent: #00ed64;
-  --link: #0498ec;
-  --warning: #ffc010;
+  --link: #3d9dff;
+  --warning: #ffad00;
   --danger: #ff6960;
 
   --rail: 250px;
@@ -16,7 +16,7 @@
   --gap: 12px;
 
   color-scheme: dark;
-  font-family: 'Euclid Circular A', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Special Gothic', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -263,8 +263,8 @@ select, input[type='text'] {
 /* Linha que está apontando um nó no grafo. O par lista↔grafo precisa ser óbvio
    nos dois sentidos: o nó ganha borda no canvas, a linha ganha marca aqui. */
 .row.apontado, .alert.as-button.apontado {
-  border-color: var(--link, #0498ec);
-  box-shadow: inset 3px 0 0 var(--link, #0498ec);
+  border-color: var(--link, #3d9dff);
+  box-shadow: inset 3px 0 0 var(--link, #3d9dff);
 }
 
 /* Alerta clicável: mesma correção do `.row.as-button` — tira a aparência de
@@ -278,7 +278,7 @@ select, input[type='text'] {
 /* Caixa de escopo da busca. */
 .check-line {
   display: flex; align-items: center; gap: 7px;
-  font-size: 11.5px; color: var(--text-muted, #889397); cursor: pointer;
+  font-size: 11.5px; color: var(--text-muted, #9ea2a1); cursor: pointer;
   margin: 2px 0 4px;
 }
 .check-line input { accent-color: var(--accent, #00ed64); cursor: pointer; }
