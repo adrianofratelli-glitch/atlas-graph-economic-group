@@ -111,7 +111,7 @@ def main() -> None:
     p.add_argument("--timeout", type=int, default=600)
     args = p.parse_args()
 
-    db = get_db()
+    db = get_db(write=not args.status)
     coll = db.companies
 
     alvos = [

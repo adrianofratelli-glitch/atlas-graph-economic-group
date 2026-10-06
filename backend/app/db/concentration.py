@@ -11,7 +11,7 @@ from typing import Any
 from bson.binary import Binary, BinaryVectorDtype
 
 from app.config import get_settings
-from app.db.client import get_db, with_retry
+from app.db.client import bounded_aggregate, get_db, with_retry
 from app.db.search import IndexUnavailable, index_status
 
 # Acima disto, duas atividades são o mesmo negócio para efeito de concentração.
@@ -31,8 +31,9 @@ def group_concentration(company_ids: list[str]) -> dict[str, Any]:
 
     # --- 1. o que o grupo faz, por exposição ---
     atividades = with_retry(
-        lambda: list(
-            db.companies.aggregate(
+        lambda: (
+            bounded_aggregate(
+                db.companies,
                 [
                     {"$match": {"_id": {"$in": company_ids}, "is_holding": {"$ne": True}}},
                     {
@@ -54,7 +55,7 @@ def group_concentration(company_ids: list[str]) -> dict[str, Any]:
                     },
                     {"$sort": {"limite": -1}},
                 ],
-                allowDiskUse=True, maxTimeMS=s.graph_max_time_ms,
+                allowDiskUse=True,
             )
         ),
         "concentration: atividades",
@@ -110,8 +111,8 @@ def group_concentration(company_ids: list[str]) -> dict[str, Any]:
         {"$project": {"_id": 1, "score": 1}},
         {"$sort": {"score": -1}},
     ]
-    vizinhas = with_retry(lambda: list(db.activities.aggregate(
-        pipeline, maxTimeMS=s.graph_max_time_ms)), "concentration: atividades equivalentes")
+    vizinhas = with_retry(lambda: bounded_aggregate(db.activities, pipeline),
+        "concentration: atividades equivalentes")
     # Mais de 50 descrições exige aumentar cobertura antes de alegar análise completa.
     if len(vizinhas) == 50:
         raise IndexUnavailable(s.vector_index, "ACTIVITY_CATALOG_LIMIT")

@@ -73,15 +73,34 @@ python3 -m venv backend/venv && backend/venv/bin/pip install -r backend/requirem
 
 ## Generating the data
 
+One command rebuilds the whole demo state — people, ownership, commercial
+hierarchy, B-tree indexes, review state, activity embeddings, Atlas Search and
+Vector Search indexes (it waits for `READY`) — and then verifies counts,
+traversal indexes, index status and a reference `$graphLookup`:
+
 ```bash
-bash data-generator/run_all.sh              # people, ownership, hierarchy, indexes
-.venv/bin/python schema/search_indexes.py   # search indexes, waits until READY
-.venv/bin/python data-generator/embed_activities.py
+ALLOW_DEMO_DB_WRITE=1 .venv/bin/python scripts/reset_demo.py
 ```
 
+It refuses any database whose name does not end in `_test` unless
+`ALLOW_DEMO_DB_WRITE=1` is set; every script in `data-generator/` applies the
+same guard. To validate the pipeline without touching the demo, point it at a
+test database with the reduced scale (20,000 people, 30,000 companies, 1,000
+groups and the same 40 showcase groups):
+
+```bash
+MONGODB_DB=graph_grupo_economico_test .venv/bin/python scripts/reset_demo.py --scale small --drop
+```
+
+`bash data-generator/run_all.sh` is kept as a shortcut to the same script.
+Volume can be overridden with `PEOPLE`, `COMPANIES`, `ECON_GROUPS` and
+`SHOWCASE`. Do not use `GROUPS`: it is a special read-only variable in bash, and
+earlier versions of `run_all.sh` silently generated 20 groups because of it.
+Without `VOYAGE_API_KEY` the embedding step is skipped and only the semantic
+panel is unavailable.
+
 The defaults are 800,000 individuals, 1.2 million companies, 40,000 economic groups
-and a 969-person commercial hierarchy. For a quick pass, use
-`COMPANIES=200000 bash data-generator/run_all.sh`.
+and a 969-person commercial hierarchy.
 
 Running it again duplicates nothing: every document has an identifier derived from
 its own content, so a second run rewrites the same records.
@@ -103,12 +122,27 @@ DEV=1 ./start.sh     # with hot reload, for development
 Current validation and load results are described in [the validation report](docs/resilience-validation.md). The older latency and ingestion measurements remain in [queries/benchmarks.md](queries/benchmarks.md), labelled with their original environment and date. They do not describe the latency of the current network path or prove a before/after gain for this release.
 
 ```bash
-backend/venv/bin/python -m unittest discover -s tests -p 'test_*.py'
+backend/venv/bin/python -m unittest discover -s tests -p 'test_*.py'   # offline, no Atlas
 node --test frontend/tests/*.test.mjs
-backend/venv/bin/python tests/test_resilience.py --quick
-backend/venv/bin/python tests/live_hardening.py
+backend/venv/bin/python tests/test_resilience.py --quick   # needs ./start.sh; read-only
+backend/venv/bin/python tests/http_adversarial.py          # needs ./start.sh; read-only
+backend/venv/bin/python tests/live_hardening.py            # own graph_resilience_test_<uuid>
+backend/venv/bin/python tests/live_graph_adversarial.py    # own graph_adversarial_test_<uuid>
 backend/venv/bin/python tests/stress.py --max 64 --seconds 20
 ```
+
+`live_graph_adversarial.py` builds hostile topologies in a throwaway database —
+a hub with 5,000 children, a three-node cycle, a self-loop, a 20-level chain,
+an edge to a missing owner, Unicode names — and checks that each traversal
+terminates, respects the node and depth caps, declares partial coverage, turns
+an exhausted `GRAPH_MAX_TIME_MS` into a 503 with a hint, and stays deterministic
+under 40 concurrent requests. It also measures how long a freshly written edge
+takes to appear in the next traversal. `http_adversarial.py` covers oversized
+id lists, unknown fields, Mongo operators, NUL/RTL/zero-width input, CORS and
+45 simultaneous alert streams.
+
+`GRAPH_MAX_TIME_MS` is applied with `pymongo.timeout()`: with the client-level
+`timeoutMS`, the driver ignores a per-operation `maxTimeMS`.
 
 The live write suite creates and removes its own database. It does not reset the demonstration dataset. Browser tests cover the usual flow, narrow screens, delayed responses, duplicate clicks, unavailable panels and recovery after disconnection.
 

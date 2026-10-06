@@ -48,7 +48,7 @@ import queue
 import threading
 import time
 from datetime import datetime, timezone
-from typing import Any, Iterator
+from typing import Any, AsyncIterator
 
 from pymongo.errors import PyMongoError
 
@@ -57,6 +57,15 @@ from app.db.client import get_db
 log = logging.getLogger(__name__)
 
 QUEUE_MAX = 200
+# Teto de assinantes SSE simultâneos. Cada aba aberta é um assinante; sem teto,
+# um navegador com reconexão em laço acumula filas e memória no processo.
+MAX_SUBSCRIBERS = 64
+HEARTBEAT_S = 15.0
+POLL_S = 0.25
+
+
+class TooManySubscribers(RuntimeError):
+    """Mais conexões SSE do que o processo aceita servir."""
 
 # Janela de coalescência: `update_many` sobre um grupo de 40 empresas chega como
 # 40 eventos em poucos milissegundos. Meio segundo é folgado para juntá-los e
@@ -87,6 +96,8 @@ class AlertHub:
     def subscribe(self) -> queue.Queue:
         q: queue.Queue = queue.Queue(maxsize=QUEUE_MAX)
         with self._lock:
+            if len(self._subscribers) >= MAX_SUBSCRIBERS:
+                raise TooManySubscribers(f"limite de {MAX_SUBSCRIBERS} conexões de alerta atingido")
             self._subscribers.append(q)
         return q
 
@@ -157,7 +168,9 @@ class AlertHub:
                         self._descarrega(pendentes)
             except PyMongoError as exc:
                 self.state["running"] = False
-                self.state["last_error"] = str(exc)
+                # `state` sai em /health e /api/alerts/recent: só o tipo, sem o
+                # host do cluster que a mensagem do driver carrega.
+                self.state["last_error"] = type(exc).__name__
                 log.warning("change stream caiu (%s); retomando em 2s", exc)
                 self._stop.wait(2)
         self.state["running"] = False
@@ -285,15 +298,31 @@ class AlertHub:
 hub = AlertHub()
 
 
-def sse_stream(q: queue.Queue) -> Iterator[str]:
-    """Gerador SSE. O heartbeat evita que proxy/navegador derrube a conexão ociosa."""
+async def sse_stream_async(q: queue.Queue, is_disconnected=None) -> AsyncIterator[str]:
+    """Gerador SSE assíncrono: não ocupa thread do pool enquanto espera evento.
+
+    A versão síncrona anterior bloqueava uma thread do threadpool do
+    Starlette por conexão em `q.get(timeout=15)`. Com ~40 abas abertas o pool
+    inteiro (40 threads por padrão) ficava preso esperando alerta, e toda rota
+    síncrona — inclusive `/health/live` — passava a responder em 12 s ou mais.
+    Aqui a espera é `asyncio.sleep`, que não consome thread.
+    """
+    import asyncio
+    import json
+
     yield ": conectado\n\n"
+    ocioso = 0.0
     while True:
         try:
-            payload = q.get(timeout=15)
+            payload = q.get_nowait()
         except queue.Empty:
-            yield ": heartbeat\n\n"
+            if is_disconnected is not None and await is_disconnected():
+                return
+            await asyncio.sleep(POLL_S)
+            ocioso += POLL_S
+            if ocioso >= HEARTBEAT_S:
+                ocioso = 0.0
+                yield ": heartbeat\n\n"
             continue
-        import json
-
+        ocioso = 0.0
         yield f"data: {json.dumps(payload, default=str)}\n\n"

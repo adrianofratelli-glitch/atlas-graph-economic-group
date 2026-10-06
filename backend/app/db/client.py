@@ -16,7 +16,9 @@ from functools import lru_cache
 from threading import Lock
 from typing import Callable, TypeVar
 
+import pymongo
 from pymongo import MongoClient
+from pymongo.collection import Collection
 from pymongo.database import Database
 from pymongo.errors import AutoReconnect, ConnectionFailure, NetworkTimeout
 
@@ -54,14 +56,32 @@ def get_db() -> Database:
     return get_client()[get_settings().db_name]
 
 
+def bounded_aggregate(coll: Collection, pipeline: list[dict], **kwargs) -> list[dict]:
+    """Agregação com o teto `GRAPH_MAX_TIME_MS` efetivamente aplicado.
+
+    Com `timeoutMS` no cliente (CSOT), o driver **ignora** o `maxTimeMS` passado
+    por operação e envia o prazo restante do cliente (~25 s). Medido em
+    2026-10-06: `aggregate(..., maxTimeMS=15000)` saía com `maxTimeMS: 15590`, e
+    com `GRAPH_MAX_TIME_MS=1` o traversal do hub de 5.000 filhas respondia 200.
+    `pymongo.timeout()` é a forma suportada de encurtar o prazo de um bloco.
+    """
+    cap_ms = get_settings().graph_max_time_ms
+    with pymongo.timeout(cap_ms / 1000):
+        return list(coll.aggregate(pipeline, **kwargs))
+
+
 def with_retry(fn: Callable[[], T], what: str = "operação") -> T:
-    """Backoff exponencial só para falha transitória de rede."""
+    """Backoff exponencial só para falha transitória de rede.
+
+    Prazo estourado (`exc.timeout`) não é transitório: repetir uma agregação que
+    já gastou o teto inteiro só triplica a espera do apresentador.
+    """
     delay = 0.25
     for attempt in range(1, MAX_ATTEMPTS + 1):
         try:
             return fn()
         except TRANSIENT as exc:
-            if attempt == MAX_ATTEMPTS:
+            if getattr(exc, "timeout", False) or attempt == MAX_ATTEMPTS:
                 log.error("%s falhou após %d tentativas: %s", what, attempt, exc)
                 raise
             log.warning("%s: falha transitória (%s), tentativa %d/%d", what, exc, attempt, MAX_ATTEMPTS)

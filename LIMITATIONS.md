@@ -181,8 +181,9 @@ distinction the qualification table in `README.md` draws.
 
 And look at the time **before** the failure — 38 to 180 seconds. The stage does not
 fail fast: it traverses, accumulates, and only discovers it does not fit once the
-time is already spent. That is why the backend passes `maxTimeMS`
-(`GRAPH_MAX_TIME_MS`, default 15 s) — without it the client stares at a frozen
+time is already spent. That is why the backend bounds every aggregation with `pymongo.timeout()`
+(`GRAPH_MAX_TIME_MS`, default 15 s; a per-operation `maxTimeMS` is ignored by the
+driver once the client sets `timeoutMS`) — without it the client stares at a frozen
 screen for up to three minutes to receive an error.
 
 **`allowDiskUse` does not help.** This is not a sort or group spill: it is the size

@@ -9,18 +9,20 @@ import logging
 import os
 import time
 from contextlib import asynccontextmanager
+from typing import Annotated
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, JSONResponse
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints, field_validator
+from bson.errors import BSONError
 from pymongo.errors import PyMongoError
 
 from app.config import get_settings
 from app.db import concentration, credit_decision, hierarchy, ownership, search
 from app.db.client import get_db
 from app.services import credit_demo, limits, investigation
-from app.services.alerts import hub, sse_stream
+from app.services.alerts import TooManySubscribers, hub, sse_stream_async
 
 s = get_settings()
 logging.basicConfig(level=s.log_level, format="%(asctime)s %(levelname)s %(name)s %(message)s")
@@ -47,13 +49,31 @@ app.add_middleware(
 
 
 
+def _mongo_unavailable(exc: Exception) -> dict:
+    # A mensagem do driver traz o host do cluster (`<shard>.mongodb.net:27017`).
+    # Ela vai para o log do servidor, nunca para o corpo da resposta.
+    log.warning("MongoDB indisponível: %s", type(exc).__name__)
+    return {
+        "feature": "mongodb", "error": "MongoDB indisponível ou prazo da operação excedido.",
+        "hint": "Atualize a consulta. Se estava gravando, confira o caso antes de tentar novamente.",
+    }
+
+
 @app.exception_handler(PyMongoError)
 async def database_unavailable(request, exc):
     log.warning("MongoDB indisponível em %s: %s", request.url.path, type(exc).__name__)
-    return JSONResponse(status_code=503, content={"detail": {
-        "feature": "mongodb", "error": "MongoDB indisponível ou prazo da operação excedido.",
-        "hint": "Atualize a consulta. Se estava gravando, confira o caso antes de tentar novamente.",
+    return JSONResponse(status_code=503, content={"detail": _mongo_unavailable(exc)})
+
+@app.exception_handler(BSONError)
+async def request_too_large_for_mongo(request, exc):
+    # `DocumentTooLarge` herda de `bson.errors.InvalidDocument`, não de
+    # `PyMongoError`: sem este handler, um comando acima de 16 MB vira 500 cru.
+    log.warning("comando recusado pelo driver em %s: %s", request.url.path, type(exc).__name__)
+    return JSONResponse(status_code=413, content={"detail": {
+        "feature": "mongodb", "error": "A consulta montada excede o tamanho aceito pelo MongoDB.",
+        "hint": "Reduza a quantidade de ids enviados ou consulte um grupo menor.",
     }})
+
 
 # --------------------------------------------------------------------------- modelos
 # Corpo de POST passa por schema, nunca por checagem manual. Duas falhas reais da
@@ -73,15 +93,23 @@ class ReviewIn(BaseModel):
         return value.strip()
 
 
+# Ids internos têm 44 caracteres (`company_<uuid5>`). Sem teto por item, 2.000
+# ids de 10 KB montavam um comando de 20 MB que o driver recusa com
+# `DocumentTooLarge` — fora da hierarquia `PyMongoError`, logo um 500 cru.
+EntityId = Annotated[str, StringConstraints(min_length=1, max_length=64)]
+
+
 class ConcentrationIn(BaseModel):
-    company_ids: list[str] = Field(min_length=1, max_length=2000)
+    model_config = ConfigDict(extra="forbid")
+    company_ids: list[EntityId] = Field(min_length=1, max_length=2000)
 
 
 class SearchCompaniesIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     q: str = Field(min_length=1, max_length=200)
     limit: int = Field(default=10, ge=1, le=50)
-    company_ids: list[str] | None = Field(default=None, max_length=2000)
-    node_ids: list[str] | None = Field(default=None, max_length=4000)
+    company_ids: list[EntityId] | None = Field(default=None, max_length=2000)
+    node_ids: list[EntityId] | None = Field(default=None, max_length=4000)
     # Escopado ao grafo é o padrão. Abrir para a base inteira é ação deliberada de
     # entity resolution, não o comportamento normal da tela.
     scope_only: bool = True
@@ -118,7 +146,7 @@ def health() -> dict:
         db.command("ping")
         checks["mongodb"] = {"ok": True, "ping_ms": round((time.perf_counter() - t0) * 1000, 1)}
     except PyMongoError as exc:
-        return {"status": "down", "checks": {"mongodb": {"ok": False, "error": str(exc)}}}
+        return {"status": "down", "checks": {"mongodb": {"ok": False, "error": type(exc).__name__}}}
 
     try:
         checks["counts"] = {
@@ -131,7 +159,7 @@ def health() -> dict:
             status = "degraded"
     except PyMongoError as exc:
         status = "degraded"
-        checks["counts"] = {"error": str(exc)}
+        checks["counts"] = {"error": type(exc).__name__}
 
     try:
         checks["search_index"] = {
@@ -142,7 +170,7 @@ def health() -> dict:
         if any(v != "READY" for v in checks["search_index"].values()):
             status = "degraded"
     except Exception as exc:  # noqa: BLE001 — o health nunca pode derrubar a si mesmo
-        checks["search_index"] = {"error": str(exc)}
+        checks["search_index"] = {"error": type(exc).__name__}
         status = "degraded"
 
     try:
@@ -160,7 +188,7 @@ def health() -> dict:
         }
     except PyMongoError as exc:
         status = "degraded"
-        checks["graphlookup_probe"] = {"ok": False, "error": str(exc)}
+        checks["graphlookup_probe"] = {"ok": False, "error": type(exc).__name__}
 
     checks["bulkhead"] = limits.estado()
     checks["change_stream"] = hub.state
@@ -182,7 +210,7 @@ def economic_group(cnpj: str, depth: int | None = Query(None, description=f"limi
     try:
         result = ownership.economic_group(cnpj.strip(), depth=depth)
     except PyMongoError as exc:
-        raise HTTPException(503, f"MongoDB indisponível: {exc}") from exc
+        raise HTTPException(503, detail=_mongo_unavailable(exc)) from exc
     if result.get("too_large"):
         raise HTTPException(
             503,
@@ -215,7 +243,7 @@ def advisor_portfolio(advisor_id: str, limit: int = Query(50, ge=1, le=200)):
         with limits.vaga("carteira"):
             result = hierarchy.portfolio(advisor_id, limite_empresas=limit)
     except PyMongoError as exc:
-        raise HTTPException(503, f"MongoDB indisponível: {exc}") from exc
+        raise HTTPException(503, detail=_mongo_unavailable(exc)) from exc
     if not result.get("found"):
         raise HTTPException(404, f"usuário `{advisor_id}` não encontrado")
     return result
@@ -227,7 +255,7 @@ def advisor_can_see(advisor_id: str, cnpj: str):
     try:
         result = hierarchy.can_see(advisor_id, cnpj.strip())
     except PyMongoError as exc:
-        raise HTTPException(503, f"MongoDB indisponível: {exc}") from exc
+        raise HTTPException(503, detail=_mongo_unavailable(exc)) from exc
     if not result.get("found"):
         raise HTTPException(404, f"CNPJ `{cnpj}` não encontrado")
     return result
@@ -364,12 +392,21 @@ def reset():
 
 # --------------------------------------------------------------------------- tempo real
 @app.get("/api/alerts/stream")
-def alerts_stream():
-    q = hub.subscribe()
+async def alerts_stream(request: Request):
+    # Assíncrono de propósito: um gerador síncrono prendia uma thread do pool por
+    # aba aberta e, com ~40 abas, travava todas as rotas síncronas da API.
+    try:
+        q = hub.subscribe()
+    except TooManySubscribers as exc:
+        raise HTTPException(503, detail={
+            "feature": "alerts_stream", "error": str(exc),
+            "hint": "Feche abas antigas da demo; os alertas recentes seguem em /api/alerts/recent.",
+        }) from exc
 
-    def gen():
+    async def gen():
         try:
-            yield from sse_stream(q)
+            async for chunk in sse_stream_async(q, request.is_disconnected):
+                yield chunk
         finally:
             hub.unsubscribe(q)
 

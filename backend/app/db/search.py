@@ -23,7 +23,7 @@ import time
 from typing import Any
 
 from app.config import get_settings
-from app.db.client import get_db, with_retry
+from app.db.client import bounded_aggregate, get_db, with_retry
 
 
 class IndexUnavailable(RuntimeError):
@@ -110,7 +110,7 @@ def _busca_socios(
     if traces is not None:
         traces.append({"namespace": f"{s.db_name}.people", "pipeline": pipeline})
     try:
-        achados = with_retry(lambda: list(get_db().people.aggregate(pipeline, maxTimeMS=s.graph_max_time_ms)), "resolve_person")
+        achados = with_retry(lambda: bounded_aggregate(get_db().people, pipeline), "resolve_person")
     except Exception:  # Sócios degradam isoladamente, mas nunca silenciosamente.
         if warnings is not None:
             warnings.append({"feature": "people_search", "status": "QUERY_FAILED"})
@@ -228,7 +228,7 @@ def resolve_company(
         results = []  # Escopo vazio nunca pode virar busca global implicitamente.
     else:
         traces.append({"namespace": f"{s.db_name}.companies", "pipeline": pipeline})
-        results = with_retry(lambda: list(db.companies.aggregate(pipeline, maxTimeMS=s.graph_max_time_ms)), "resolve_company")
+        results = with_retry(lambda: bounded_aggregate(db.companies, pipeline), "resolve_company")
 
     if escopo and not escopo_apenas:
         # O restante do pipeline (hidratação e projeção) é o mesmo; só a primeira
@@ -237,7 +237,7 @@ def resolve_company(
         # qualquer diferença de relevância entre dois homônimos.
         traces.append({"namespace": f"{s.db_name}.companies", "pipeline": _busca(escopo) + pipeline[2:]})
         no_grupo = with_retry(
-            lambda: list(db.companies.aggregate(_busca(escopo) + pipeline[2:], maxTimeMS=s.graph_max_time_ms)),
+            lambda: bounded_aggregate(db.companies, _busca(escopo) + pipeline[2:]),
             "resolve_company escopado",
         )
         vistos = {r["_id"] for r in no_grupo}
