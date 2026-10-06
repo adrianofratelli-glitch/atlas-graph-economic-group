@@ -26,7 +26,7 @@ from typing import Any
 from pymongo.errors import OperationFailure
 
 from app.config import get_settings
-from app.db.client import get_db, with_retry
+from app.db.client import bounded_aggregate, get_db, with_retry
 
 # Profundidade da árvore comercial: superintendente → regional → gerente →
 # assessor. 4 dá folga de um nível sobre o desenho atual sem abrir a porta para
@@ -61,10 +61,7 @@ def _subordinados_pipeline(advisor_id: str) -> list[dict[str, Any]]:
 def team(advisor_id: str) -> dict[str, Any] | None:
     """O usuário e todo mundo abaixo dele. Um assessor devolve equipe vazia."""
     docs = with_retry(
-        lambda: list(get_db().advisors.aggregate(
-            _subordinados_pipeline(advisor_id),
-            maxTimeMS=get_settings().graph_max_time_ms,
-        )),
+        lambda: bounded_aggregate(get_db().advisors, _subordinados_pipeline(advisor_id)),
         "equipe do assessor",
     )
     return docs[0] if docs else None
@@ -139,7 +136,7 @@ def portfolio(advisor_id: str, limite_empresas: int = 50) -> dict[str, Any]:
 
     try:
         docs = with_retry(
-            lambda: list(get_db().advisors.aggregate(pipeline, maxTimeMS=s.graph_max_time_ms)),
+            lambda: bounded_aggregate(get_db().advisors, pipeline),
             "carteira do escopo",
         )
     except OperationFailure as exc:
@@ -201,7 +198,7 @@ def can_see(advisor_id: str, cnpj: str) -> dict[str, Any]:
     # `find_one` e depois a agregação) — com um piso de rede alto, a segunda ida
     # custava mais do que todo o trabalho de banco somado.
     docs = with_retry(
-        lambda: list(db.companies.aggregate([
+        lambda: bounded_aggregate(db.companies, [
             {"$match": {"cnpj": cnpj}},
             {"$limit": 1},
             {"$lookup": {
@@ -226,7 +223,7 @@ def can_see(advisor_id: str, cnpj: str) -> dict[str, Any]:
             }},
             {"$project": {"razao_social": 1, "advisor_id": 1,
                           "dono": {"$first": "$dono"}}},
-        ], maxTimeMS=get_settings().graph_max_time_ms)),
+        ]),
         "cadeia de comando",
     )
     if not docs:

@@ -40,10 +40,10 @@ from __future__ import annotations
 import time
 from typing import Any
 
-from pymongo.errors import ExecutionTimeout, OperationFailure
+from pymongo.errors import ExecutionTimeout, OperationFailure, PyMongoError
 
 from app.config import get_settings
-from app.db.client import get_db, with_retry
+from app.db.client import bounded_aggregate, get_db, with_retry
 
 
 # Teto de raízes das quais se desce. Um grupo com mais controladores no topo é
@@ -59,8 +59,8 @@ def clamp_depth(requested: int | None) -> int:
     return max(1, min(int(requested), s.depth_cap))
 
 
-def _falha(exc: OperationFailure) -> str:
-    if isinstance(exc, ExecutionTimeout):
+def _falha(exc: PyMongoError) -> str:
+    if isinstance(exc, ExecutionTimeout) or getattr(exc, "timeout", False):
         return "tempo limite: o traversal não terminou dentro do teto configurado"
     msg = str(exc)
     if "exceeds" in msg and "bytes" in msg:
@@ -314,13 +314,13 @@ def economic_group(cnpj: str, depth: int | None = None, *, session=None) -> dict
 
     try:
         def execute():
-            return list(get_db().companies.aggregate(
-                pipeline, maxTimeMS=s.graph_max_time_ms, session=session,
-            ))
+            return bounded_aggregate(get_db().companies, pipeline, session=session)
         # O driver controla retries da transação inteira; não repetir uma leitura isolada.
         docs = execute() if session is not None else with_retry(execute, "grupo econômico")
-    except OperationFailure as exc:
-        if session is not None:
+    except PyMongoError as exc:
+        # Prazo estourado no cliente (CSOT) chega como `NetworkTimeout`, não como
+        # `ExecutionTimeout`; os dois são o mesmo fato para o apresentador.
+        if session is not None or not (isinstance(exc, OperationFailure) or exc.timeout):
             raise
         return {
             "found": False,
