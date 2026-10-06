@@ -18,7 +18,10 @@ day.
    second and the rest are instant — take that second off the critical path.
 5. Note one applicant CNPJ from the selector. If the UI fails live, the same
    numbers come out of `curl localhost:8350/api/group/<cnpj>?depth=3`.
-6. If you have just reloaded the base, **restart the backend**: the change-stream
+6. If the base itself is damaged (missing groups, indexes or vectors), rebuild
+   everything with `ALLOW_DEMO_DB_WRITE=1 .venv/bin/python scripts/reset_demo.py`
+   — never during the presentation; the full scale takes several minutes.
+7. If you have just reloaded the base, **restart the backend**: the change-stream
    listener resumes from its stored token and spends time draining the oplog.
 
 ## Part 1 — the credit decision (about 10 minutes)

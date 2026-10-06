@@ -212,6 +212,13 @@ de commit, garantia) num grid de duas colunas, com o resto atrás de um
 ocupava altura à toa). Medido depois: 922 px com caso aberto e tudo
 recolhido — exatamente o viewport, sem scroll.
 
+## Canal de eventos fechado não finge reconexão
+
+O backend aceita até 64 conexões SSE simultâneas; acima disso responde `503`.
+O `EventSource` não tenta de novo depois de uma resposta que não é
+`text/event-stream`, então a tela mostra "Canal de eventos: indisponível" em vez
+de "reconectando". Os alertas persistidos seguem em `/api/alerts/recent`.
+
 ## Nada além de um alerta rouba a aba
 
 Todo evento SSE chamava `setTab('alerts')`. Durante um `update_many` grande a

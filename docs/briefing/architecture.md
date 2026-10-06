@@ -58,7 +58,7 @@ code. Isso é o que permite trocar driver ou versão sem tocar nas rotas.
 | `backend/app/db/search.py` | Atlas Search sobre razão social e nome de sócio (entity resolution) |
 | `backend/app/db/concentration.py` | Atlas Vector Search sobre descrição de atividade (concentração semântica) |
 | `backend/app/db/credit_decision.py` | transação ACID multi-documento (abrir/fechar revisão de crédito) |
-| `backend/app/services/alerts.py` | `AlertHub` — change stream em thread própria, alimenta SSE |
+| `backend/app/services/alerts.py` | `AlertHub` — change stream em thread própria, alimenta SSE por gerador assíncrono (não prende thread do pool; teto de 64 assinantes, acima disso 503) |
 | `backend/app/services/limits.py` | bulkhead: semáforo por classe de consulta analítica |
 | `backend/app/services/credit_demo.py` | pontos de entrada da demo (`economic_groups`, ground truth) |
 
@@ -113,8 +113,12 @@ tem uma consequência prática se for esquecida.
    distância de hop mais curta. Em profundidade alta o gargalo é o navegador,
    não o Atlas; truncar a partir da periferia preserva o que importa, e o
    payload reporta `truncated: true`.
-7. **Teto de tempo, não só de tamanho.** Todo traversal roda com `maxTimeMS`
-   (`GRAPH_MAX_TIME_MS`, padrão 15 s). Medido: num grafo de 2,4 M de arestas,
+7. **Teto de tempo, não só de tamanho.** Todo traversal roda sob
+   `pymongo.timeout(GRAPH_MAX_TIME_MS)` (padrão 15 s), via
+   `client.bounded_aggregate`. Com `timeoutMS` no cliente (CSOT) o driver
+   ignora o `maxTimeMS` por operação; até 2026-10 o teto efetivo era o do
+   cliente (25 s), e não os 15 s documentados. Prazo estourado não é repetido
+   por `with_retry`. Medido: num grafo de 2,4 M de arestas,
    `$graphLookup` moeu **97 segundos** antes de estourar o limite de 100 MB do
    documento de saída. Sem o teto isso é uma tela travada por um minuto e
    meio terminando em erro; com o teto, `503` com `too_large: true` e uma
@@ -177,7 +181,7 @@ tem uma consequência prática se for esquecida.
 | GET | `/api/credit/case/{case_id}` | o caso aberto, com o antes/depois do que a transação mudou |
 | POST | `/api/credit/close/{case_id}` | encerra um caso |
 | POST | `/api/demo/reset` | devolve o dataset ao estado pré-demo |
-| GET | `/api/alerts/stream` | SSE alimentado pelo change stream |
+| GET | `/api/alerts/stream` | SSE alimentado pelo change stream; 503 acima de 64 conexões |
 | GET | `/api/alerts/recent` | os alertas persistidos mais recentes |
 
 ## Ordem de operação (setup)
@@ -188,9 +192,15 @@ sintético foi decidida por medição antes de qualquer linha de backend existir
 mostra o grupo inteiro na profundidade 1 ou um triângulo isolado na
 profundidade 3.
 
-`embed_activities.py` roda **por último**, depois que a base societária já
-existe — rodar antes deixa as empresas do grupo sem vetor de atividade, e o
-painel de concentração escopado ao grupo em tela volta quase vazio.
+`scripts/reset_demo.py` executa tudo em ordem: pessoas, base societária,
+hierarquia, índices B-tree (`schema/indexes.js` com `MONGODB_DB` repassado),
+estado de revisão, vetores (`embed_activities.py`, que só roda depois da base
+societária — antes, o painel de concentração voltava quase vazio), índices
+Atlas Search/Vector Search com espera por `READY` e uma conferência final.
+Recusa banco que não termine em `_test` sem `ALLOW_DEMO_DB_WRITE=1`; a mesma
+guarda vale para cada script de `data-generator/`. `run_all.sh` é atalho para
+ele. A variável de volume dos grupos é `ECON_GROUPS`: `GROUPS` é especial no
+bash e fazia o atalho antigo gerar sempre 20 grupos.
 
 ```bash
 cp .env.example .env
@@ -198,16 +208,19 @@ python3 -m venv .venv && .venv/bin/pip install -r data-generator/requirements.tx
 python3 -m venv backend/venv && backend/venv/bin/pip install -r backend/requirements.txt
 (cd frontend && npm install)
 
-bash data-generator/run_all.sh
-.venv/bin/python schema/search_indexes.py
-.venv/bin/python data-generator/embed_activities.py
+ALLOW_DEMO_DB_WRITE=1 .venv/bin/python scripts/reset_demo.py
+# validação sem tocar a demo:
+MONGODB_DB=graph_grupo_economico_test .venv/bin/python scripts/reset_demo.py --scale small --drop
 
-./start.sh                 # POV_DEV=1 ./start.sh para HMR e --reload
+./start.sh                 # DEV=1 ./start.sh para HMR e --reload
 ```
 
 ## Testes
 
 ```bash
+backend/venv/bin/python -m unittest discover -s tests -p 'test_*.py'  # offline
+backend/venv/bin/python tests/http_adversarial.py     # API em execução, só leitura
+backend/venv/bin/python tests/live_graph_adversarial.py  # topologias hostis em banco efêmero
 .venv/bin/python tests/test_resilience.py           # suíte hostil completa
 .venv/bin/python tests/test_resilience.py --quick    # sem change stream e carga
 PYTHONPATH=backend .venv/bin/python queries/bench.py --runs 30

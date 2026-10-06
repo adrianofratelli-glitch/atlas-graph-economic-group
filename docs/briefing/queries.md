@@ -94,7 +94,7 @@ db.companies.aggregate([
       as: "cadeia", maxDepth: 3, depthField: "nivel"
   }},
   // ... derivação de raízes, descida correlacionada, hidratação ...
-], { maxTimeMS: 15000 })
+])  // prazo: pymongo.timeout(GRAPH_MAX_TIME_MS) em client.bounded_aggregate
 ```
 
 **Por que existe / motivação de performance:** a versão anterior fazia o
@@ -113,7 +113,8 @@ processamento em lote, não consulta interativa.
 backend, nunca aceito cru do cliente.
 
 **Tratamento de erro:** se `$graphLookup` atinge limites de memória/tamanho
-ou o `maxTimeMS`, a função devolve `too_large: true` em
+ou o prazo `GRAPH_MAX_TIME_MS` (servidor `ExecutionTimeout` ou cliente
+`NetworkTimeout` do CSOT), a função devolve `too_large: true` em
 vez de deixar a exceção subir (`_falha()`, linhas 63–69).
 
 ---
