@@ -32,11 +32,35 @@ def det_id(kind: str, *parts: Any) -> str:
     return f"{kind}_{uuid.uuid5(NAMESPACE, '|'.join(str(p) for p in parts))}"
 
 
-def get_db() -> Database:
+DEMO_DB = "graph_grupo_economico"
+
+
+def db_name() -> str:
+    return os.getenv("MONGODB_DB", DEMO_DB)
+
+
+def assert_write_allowed(name: str) -> None:
+    """Escrita só em banco `*_test`, ou no banco da demo com consentimento explícito.
+
+    Todo script deste diretório reescreve dado. Rodar um deles com o `.env` da
+    demo por engano reescrevia o dataset da apresentação sem pergunta nenhuma.
+    """
+    if name.endswith("_test") or os.getenv("ALLOW_DEMO_DB_WRITE") == "1":
+        return
+    raise SystemExit(
+        f"recusado: `{name}` não termina em `_test`. Para reescrever o banco da demo, "
+        "rode de novo com ALLOW_DEMO_DB_WRITE=1."
+    )
+
+
+def get_db(write: bool = True) -> Database:
+    name = db_name()
+    if write:
+        assert_write_allowed(name)
     uri = os.environ["MONGODB_URI"]
     client = MongoClient(uri, serverSelectionTimeoutMS=10_000, retryWrites=True)
     client.admin.command("ping")
-    return client[os.getenv("MONGODB_DB", "graph_grupo_economico")]
+    return client[name]
 
 
 def chunked(it: Iterable[Any], size: int = BATCH_SIZE) -> Iterator[list[Any]]:

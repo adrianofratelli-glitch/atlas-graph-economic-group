@@ -631,7 +631,11 @@ def main() -> None:
             },
             "wall_seconds": round(time.perf_counter() - t_total, 1),
         }
-        _P("queries/load-results.json").write_text(json.dumps(relatorio, indent=2))
+        # O relatório versionado descreve a carga da base de demonstração. Uma
+        # validação em banco `_test` (tipicamente em escala reduzida) não o
+        # sobrescreve: grava ao lado, fora do controle de versão.
+        destino = "queries/load-results.json" if not db.name.endswith("_test") else "queries/load-results.test.json"
+        _P(destino).write_text(json.dumps(relatorio, indent=2))
         t = relatorio["total"]
         print(
             f"\ncarga: {t['docs']:,} documentos em {t['seconds']:.0f}s "
