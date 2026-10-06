@@ -113,7 +113,9 @@ export default function App() {
   useEffect(() => {
     const es = new EventSource('/api/alerts/stream')
     es.onopen = () => setStreamState('conectado')
-    es.onerror = () => setStreamState('reconectando')
+    // Um 503 (limite de conexões) fecha o EventSource sem nova tentativa:
+    // dizer "reconectando" ali seria mentira.
+    es.onerror = () => setStreamState(es.readyState === EventSource.CLOSED ? 'indisponível' : 'reconectando')
     es.onmessage = (ev) => {
       let evento
       try { evento = JSON.parse(ev.data) } catch { setStreamState('evento inválido'); return }
