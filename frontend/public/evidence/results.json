@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "measured_at": "2026-09-30T01:19:13.917905+00:00",
+  "measured_at": "2026-10-06T19:51:37.259879+00:00",
   "runs": 10,
   "environment": "Atlas M20 compartilhado; cliente remoto; uma consulta por vez; cache aquecido",
   "mongodb_version": "9.0.3",
@@ -16,20 +16,21 @@
   },
   "ping": {
     "samples_ms": [
-      361.747,
-      363.439,
-      364.551,
-      364.898,
-      366.209,
-      368.58,
-      370.825,
-      371.982,
-      375.561,
-      415.238
+      199.824,
+      200.824,
+      201.66,
+      203.12,
+      205.693,
+      272.061,
+      276.812,
+      295.66,
+      303.932,
+      307.281
     ],
-    "p50_ms": 367.39,
-    "p95_ms": 415.24
+    "p50_ms": 238.88,
+    "p95_ms": 307.28
   },
+  "audit_measured_at": "2026-10-06T19:51:43.007841+00:00",
   "audit": [
     {
       "group_id": "group_0000",
@@ -177,7 +178,7 @@
           "path": "$.stages[0]",
           "stage": "$cursor",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 0
+          "executionTimeMillisEstimate": 2
         },
         {
           "path": "$.stages[0].$cursor.queryPlanner.winningPlan",
@@ -188,7 +189,7 @@
           "path": "$.stages[0].$cursor.executionStats",
           "stage": null,
           "nReturned": 1,
-          "executionTimeMillis": 4,
+          "executionTimeMillis": 6,
           "totalKeysExamined": 1,
           "totalDocsExamined": 1
         },
@@ -203,7 +204,7 @@
           "path": "$.stages[1]",
           "stage": "$graphLookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1,
+          "executionTimeMillisEstimate": 2,
           "usedDisk": false,
           "spills": 0
         },
@@ -211,13 +212,13 @@
           "path": "$.stages[2]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 2
         },
         {
           "path": "$.stages[3]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1,
+          "executionTimeMillisEstimate": 3,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -229,43 +230,43 @@
           "path": "$.stages[4]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[5]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[6]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[7]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[8]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[9]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[10]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1,
+          "executionTimeMillisEstimate": 3,
           "totalDocsExamined": 2,
           "totalKeysExamined": 2,
           "collectionScans": 0,
@@ -277,25 +278,25 @@
           "path": "$.stages[11]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[12]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[13]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[14]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
+          "executionTimeMillisEstimate": 5,
           "totalDocsExamined": 7,
           "totalKeysExamined": 13,
           "collectionScans": 0,
@@ -308,43 +309,43 @@
           "path": "$.stages[15]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 5
         },
         {
           "path": "$.stages[16]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 5
         },
         {
           "path": "$.stages[17]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 5
         },
         {
           "path": "$.stages[18]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 5
         },
         {
           "path": "$.stages[19]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 5
         },
         {
           "path": "$.stages[20]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 5
         },
         {
           "path": "$.stages[21]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
+          "executionTimeMillisEstimate": 5,
           "totalDocsExamined": 7,
           "totalKeysExamined": 14,
           "collectionScans": 0,
@@ -356,7 +357,7 @@
           "path": "$.stages[22]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
+          "executionTimeMillisEstimate": 5,
           "totalDocsExamined": 4,
           "totalKeysExamined": 8,
           "collectionScans": 0,
@@ -368,7 +369,7 @@
           "path": "$.stages[23]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
+          "executionTimeMillisEstimate": 6,
           "totalDocsExamined": 3,
           "totalKeysExamined": 6,
           "collectionScans": 0,
@@ -380,7 +381,7 @@
           "path": "$.stages[24]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
+          "executionTimeMillisEstimate": 6,
           "totalDocsExamined": 7,
           "totalKeysExamined": 14,
           "collectionScans": 0,
@@ -392,10 +393,10 @@
           "path": "$.stages[25]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 6
         }
       ],
-      "elapsed_ms": 533.0
+      "elapsed_ms": 455.5
     },
     {
       "group_id": "group_0001",
@@ -651,7 +652,7 @@
           "path": "$.stages[0].$cursor.executionStats",
           "stage": null,
           "nReturned": 1,
-          "executionTimeMillis": 4,
+          "executionTimeMillis": 5,
           "totalKeysExamined": 1,
           "totalDocsExamined": 1
         },
@@ -666,7 +667,7 @@
           "path": "$.stages[1]",
           "stage": "$graphLookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
+          "executionTimeMillisEstimate": 3,
           "usedDisk": false,
           "spills": 0
         },
@@ -674,13 +675,13 @@
           "path": "$.stages[2]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[3]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
+          "executionTimeMillisEstimate": 3,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -692,43 +693,43 @@
           "path": "$.stages[4]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[5]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[6]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[7]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[8]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[9]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[10]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
+          "executionTimeMillisEstimate": 3,
           "totalDocsExamined": 3,
           "totalKeysExamined": 3,
           "collectionScans": 0,
@@ -740,25 +741,25 @@
           "path": "$.stages[11]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[12]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[13]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[14]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
+          "executionTimeMillisEstimate": 4,
           "totalDocsExamined": 14,
           "totalKeysExamined": 26,
           "collectionScans": 0,
@@ -771,43 +772,43 @@
           "path": "$.stages[15]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[16]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[17]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[18]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[19]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[20]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[21]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
+          "executionTimeMillisEstimate": 5,
           "totalDocsExamined": 13,
           "totalKeysExamined": 26,
           "collectionScans": 0,
@@ -819,7 +820,7 @@
           "path": "$.stages[22]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
+          "executionTimeMillisEstimate": 5,
           "totalDocsExamined": 5,
           "totalKeysExamined": 10,
           "collectionScans": 0,
@@ -831,7 +832,7 @@
           "path": "$.stages[23]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
+          "executionTimeMillisEstimate": 5,
           "totalDocsExamined": 3,
           "totalKeysExamined": 6,
           "collectionScans": 0,
@@ -843,7 +844,7 @@
           "path": "$.stages[24]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5,
+          "executionTimeMillisEstimate": 6,
           "totalDocsExamined": 13,
           "totalKeysExamined": 26,
           "collectionScans": 0,
@@ -855,10 +856,10 @@
           "path": "$.stages[25]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5
+          "executionTimeMillisEstimate": 6
         }
       ],
-      "elapsed_ms": 680.2
+      "elapsed_ms": 310.1
     },
     {
       "group_id": "group_0002",
@@ -1192,7 +1193,7 @@
           "path": "$.stages[0]",
           "stage": "$cursor",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 0
         },
         {
           "path": "$.stages[0].$cursor.queryPlanner.winningPlan",
@@ -1203,7 +1204,7 @@
           "path": "$.stages[0].$cursor.executionStats",
           "stage": null,
           "nReturned": 1,
-          "executionTimeMillis": 4,
+          "executionTimeMillis": 5,
           "totalKeysExamined": 1,
           "totalDocsExamined": 1
         },
@@ -1218,7 +1219,7 @@
           "path": "$.stages[1]",
           "stage": "$graphLookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
+          "executionTimeMillisEstimate": 1,
           "usedDisk": false,
           "spills": 0
         },
@@ -1226,13 +1227,13 @@
           "path": "$.stages[2]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 1
         },
         {
           "path": "$.stages[3]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
+          "executionTimeMillisEstimate": 1,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -1244,43 +1245,43 @@
           "path": "$.stages[4]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 1
         },
         {
           "path": "$.stages[5]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 1
         },
         {
           "path": "$.stages[6]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 1
         },
         {
           "path": "$.stages[7]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 1
         },
         {
           "path": "$.stages[8]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 1
         },
         {
           "path": "$.stages[9]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 1
         },
         {
           "path": "$.stages[10]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
+          "executionTimeMillisEstimate": 1,
           "totalDocsExamined": 1,
           "totalKeysExamined": 1,
           "collectionScans": 0,
@@ -1292,25 +1293,25 @@
           "path": "$.stages[11]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 1
         },
         {
           "path": "$.stages[12]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 1
         },
         {
           "path": "$.stages[13]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 1
         },
         {
           "path": "$.stages[14]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
+          "executionTimeMillisEstimate": 3,
           "totalDocsExamined": 21,
           "totalKeysExamined": 39,
           "collectionScans": 0,
@@ -1323,43 +1324,43 @@
           "path": "$.stages[15]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[16]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[17]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[18]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[19]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[20]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[21]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
+          "executionTimeMillisEstimate": 3,
           "totalDocsExamined": 19,
           "totalKeysExamined": 38,
           "collectionScans": 0,
@@ -1371,7 +1372,7 @@
           "path": "$.stages[22]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5,
+          "executionTimeMillisEstimate": 3,
           "totalDocsExamined": 8,
           "totalKeysExamined": 16,
           "collectionScans": 0,
@@ -1383,7 +1384,7 @@
           "path": "$.stages[23]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5,
+          "executionTimeMillisEstimate": 4,
           "totalDocsExamined": 3,
           "totalKeysExamined": 6,
           "collectionScans": 0,
@@ -1395,7 +1396,7 @@
           "path": "$.stages[24]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5,
+          "executionTimeMillisEstimate": 4,
           "totalDocsExamined": 19,
           "totalKeysExamined": 38,
           "collectionScans": 0,
@@ -1407,10 +1408,10 @@
           "path": "$.stages[25]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5
+          "executionTimeMillisEstimate": 4
         }
       ],
-      "elapsed_ms": 710.0
+      "elapsed_ms": 334.3
     },
     {
       "group_id": "group_0003",
@@ -1844,7 +1845,7 @@
           "path": "$.stages[0].$cursor.executionStats",
           "stage": null,
           "nReturned": 1,
-          "executionTimeMillis": 5,
+          "executionTimeMillis": 7,
           "totalKeysExamined": 1,
           "totalDocsExamined": 1
         },
@@ -1859,7 +1860,7 @@
           "path": "$.stages[1]",
           "stage": "$graphLookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
+          "executionTimeMillisEstimate": 3,
           "usedDisk": false,
           "spills": 0
         },
@@ -1867,7 +1868,7 @@
           "path": "$.stages[2]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[3]",
@@ -1921,7 +1922,7 @@
           "path": "$.stages[10]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
+          "executionTimeMillisEstimate": 4,
           "totalDocsExamined": 3,
           "totalKeysExamined": 3,
           "collectionScans": 0,
@@ -1933,25 +1934,25 @@
           "path": "$.stages[11]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[12]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[13]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[14]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
+          "executionTimeMillisEstimate": 5,
           "totalDocsExamined": 28,
           "totalKeysExamined": 52,
           "collectionScans": 0,
@@ -1964,43 +1965,43 @@
           "path": "$.stages[15]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4
+          "executionTimeMillisEstimate": 5
         },
         {
           "path": "$.stages[16]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4
+          "executionTimeMillisEstimate": 5
         },
         {
           "path": "$.stages[17]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4
+          "executionTimeMillisEstimate": 5
         },
         {
           "path": "$.stages[18]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4
+          "executionTimeMillisEstimate": 5
         },
         {
           "path": "$.stages[19]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4
+          "executionTimeMillisEstimate": 5
         },
         {
           "path": "$.stages[20]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4
+          "executionTimeMillisEstimate": 5
         },
         {
           "path": "$.stages[21]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5,
+          "executionTimeMillisEstimate": 6,
           "totalDocsExamined": 25,
           "totalKeysExamined": 50,
           "collectionScans": 0,
@@ -2012,7 +2013,7 @@
           "path": "$.stages[22]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5,
+          "executionTimeMillisEstimate": 7,
           "totalDocsExamined": 7,
           "totalKeysExamined": 14,
           "collectionScans": 0,
@@ -2024,7 +2025,7 @@
           "path": "$.stages[23]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5,
+          "executionTimeMillisEstimate": 7,
           "totalDocsExamined": 3,
           "totalKeysExamined": 6,
           "collectionScans": 0,
@@ -2036,7 +2037,7 @@
           "path": "$.stages[24]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5,
+          "executionTimeMillisEstimate": 7,
           "totalDocsExamined": 25,
           "totalKeysExamined": 50,
           "collectionScans": 0,
@@ -2048,10 +2049,10 @@
           "path": "$.stages[25]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5
+          "executionTimeMillisEstimate": 7
         }
       ],
-      "elapsed_ms": 558.4
+      "elapsed_ms": 627.5
     },
     {
       "group_id": "group_0004",
@@ -2563,7 +2564,7 @@
           "path": "$.stages[0]",
           "stage": "$cursor",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 2
         },
         {
           "path": "$.stages[0].$cursor.queryPlanner.winningPlan",
@@ -2589,7 +2590,7 @@
           "path": "$.stages[1]",
           "stage": "$graphLookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
+          "executionTimeMillisEstimate": 3,
           "usedDisk": false,
           "spills": 0
         },
@@ -2597,13 +2598,13 @@
           "path": "$.stages[2]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[3]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
+          "executionTimeMillisEstimate": 3,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -2615,43 +2616,43 @@
           "path": "$.stages[4]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[5]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[6]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[7]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[8]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[9]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[10]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
+          "executionTimeMillisEstimate": 3,
           "totalDocsExamined": 1,
           "totalKeysExamined": 1,
           "collectionScans": 0,
@@ -2663,25 +2664,25 @@
           "path": "$.stages[11]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[12]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[13]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[14]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
+          "executionTimeMillisEstimate": 5,
           "totalDocsExamined": 35,
           "totalKeysExamined": 65,
           "collectionScans": 0,
@@ -2694,43 +2695,43 @@
           "path": "$.stages[15]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4
+          "executionTimeMillisEstimate": 5
         },
         {
           "path": "$.stages[16]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4
+          "executionTimeMillisEstimate": 5
         },
         {
           "path": "$.stages[17]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4
+          "executionTimeMillisEstimate": 5
         },
         {
           "path": "$.stages[18]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4
+          "executionTimeMillisEstimate": 5
         },
         {
           "path": "$.stages[19]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4
+          "executionTimeMillisEstimate": 5
         },
         {
           "path": "$.stages[20]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4
+          "executionTimeMillisEstimate": 5
         },
         {
           "path": "$.stages[21]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
+          "executionTimeMillisEstimate": 5,
           "totalDocsExamined": 31,
           "totalKeysExamined": 62,
           "collectionScans": 0,
@@ -2742,7 +2743,7 @@
           "path": "$.stages[22]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5,
+          "executionTimeMillisEstimate": 6,
           "totalDocsExamined": 12,
           "totalKeysExamined": 24,
           "collectionScans": 0,
@@ -2754,7 +2755,7 @@
           "path": "$.stages[23]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5,
+          "executionTimeMillisEstimate": 6,
           "totalDocsExamined": 3,
           "totalKeysExamined": 6,
           "collectionScans": 0,
@@ -2766,7 +2767,7 @@
           "path": "$.stages[24]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5,
+          "executionTimeMillisEstimate": 6,
           "totalDocsExamined": 31,
           "totalKeysExamined": 62,
           "collectionScans": 0,
@@ -2778,10 +2779,10 @@
           "path": "$.stages[25]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5
+          "executionTimeMillisEstimate": 6
         }
       ],
-      "elapsed_ms": 710.9
+      "elapsed_ms": 636.2
     },
     {
       "group_id": "group_0011",
@@ -3477,7 +3478,7 @@
           "path": "$.stages[0].$cursor.executionStats",
           "stage": null,
           "nReturned": 1,
-          "executionTimeMillis": 6,
+          "executionTimeMillis": 7,
           "totalKeysExamined": 1,
           "totalDocsExamined": 1
         },
@@ -3492,7 +3493,7 @@
           "path": "$.stages[1]",
           "stage": "$graphLookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
+          "executionTimeMillisEstimate": 3,
           "usedDisk": false,
           "spills": 0
         },
@@ -3500,7 +3501,7 @@
           "path": "$.stages[2]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[3]",
@@ -3657,7 +3658,7 @@
           "path": "$.stages[23]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 6,
+          "executionTimeMillisEstimate": 7,
           "totalDocsExamined": 3,
           "totalKeysExamined": 6,
           "collectionScans": 0,
@@ -3669,7 +3670,7 @@
           "path": "$.stages[24]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 6,
+          "executionTimeMillisEstimate": 7,
           "totalDocsExamined": 43,
           "totalKeysExamined": 86,
           "collectionScans": 0,
@@ -3681,10 +3682,10 @@
           "path": "$.stages[25]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 6
+          "executionTimeMillisEstimate": 7
         }
       ],
-      "elapsed_ms": 843.3
+      "elapsed_ms": 625.9
     }
   ],
   "curve": [
@@ -3704,19 +3705,1264 @@
         "note": "Correspondências de arestas por direção; uma aresta pode aparecer nos dois sentidos. Descida contada após o cap de arestas por raiz."
       },
       "samples_ms": [
-        387.396,
-        515.013,
-        526.395,
-        526.883,
-        531.197,
-        532.061,
-        534.729,
-        535.988,
-        540.501,
-        551.959
+        383.106,
+        383.288,
+        385.681,
+        386.333,
+        390.963,
+        392.625,
+        393.732,
+        403.792,
+        412.672,
+        466.532
       ],
-      "p50_ms": 531.63,
-      "p95_ms": 551.96,
+      "p50_ms": 391.79,
+      "p95_ms": 466.53,
+      "explain": [
+        {
+          "path": "$.stages[0]",
+          "stage": "$cursor",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 1
+        },
+        {
+          "path": "$.stages[0].$cursor.queryPlanner.winningPlan",
+          "stage": "EXPRESS_IXSCAN",
+          "indexName": "cnpj_1"
+        },
+        {
+          "path": "$.stages[0].$cursor.executionStats",
+          "stage": null,
+          "nReturned": 1,
+          "executionTimeMillis": 4,
+          "totalKeysExamined": 1,
+          "totalDocsExamined": 1
+        },
+        {
+          "path": "$.stages[0].$cursor.executionStats.executionStages",
+          "stage": "EXPRESS_IXSCAN",
+          "indexName": "cnpj_1",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 0
+        },
+        {
+          "path": "$.stages[1]",
+          "stage": "$graphLookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2,
+          "usedDisk": false,
+          "spills": 0
+        },
+        {
+          "path": "$.stages[2]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[3]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2,
+          "totalDocsExamined": 0,
+          "totalKeysExamined": 0,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "owned_id_1"
+          ]
+        },
+        {
+          "path": "$.stages[4]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[5]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[6]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[7]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[8]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[9]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[10]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2,
+          "totalDocsExamined": 0,
+          "totalKeysExamined": 0,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "owned_id_1"
+          ]
+        },
+        {
+          "path": "$.stages[11]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[12]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[13]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[14]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3,
+          "totalDocsExamined": 2,
+          "totalKeysExamined": 2,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "_id_",
+            "owner_id_1"
+          ]
+        },
+        {
+          "path": "$.stages[15]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[16]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[17]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[18]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[19]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[20]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[21]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3,
+          "totalDocsExamined": 2,
+          "totalKeysExamined": 2,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "_id_"
+          ]
+        },
+        {
+          "path": "$.stages[22]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 4,
+          "totalDocsExamined": 0,
+          "totalKeysExamined": 0,
+          "collectionScans": 0,
+          "indexesUsed": []
+        },
+        {
+          "path": "$.stages[23]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 4,
+          "totalDocsExamined": 0,
+          "totalKeysExamined": 0,
+          "collectionScans": 0,
+          "indexesUsed": []
+        },
+        {
+          "path": "$.stages[24]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 4,
+          "totalDocsExamined": 2,
+          "totalKeysExamined": 2,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "company_id_1"
+          ]
+        },
+        {
+          "path": "$.stages[25]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 4
+        }
+      ]
+    },
+    {
+      "depth": 2,
+      "branching": 1,
+      "fixture_companies": 3,
+      "fixture_edges": 2,
+      "returned_companies": 3,
+      "returned_edges": 2,
+      "complete": true,
+      "reasons": [],
+      "correct": true,
+      "traversal_matches": {
+        "up": 2,
+        "down": 2,
+        "note": "Correspondências de arestas por direção; uma aresta pode aparecer nos dois sentidos. Descida contada após o cap de arestas por raiz."
+      },
+      "samples_ms": [
+        382.543,
+        383.084,
+        390.91,
+        392.033,
+        392.082,
+        395.835,
+        397.998,
+        399.451,
+        417.133,
+        418.883
+      ],
+      "p50_ms": 393.96,
+      "p95_ms": 418.88,
+      "explain": [
+        {
+          "path": "$.stages[0]",
+          "stage": "$cursor",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 1
+        },
+        {
+          "path": "$.stages[0].$cursor.queryPlanner.winningPlan",
+          "stage": "EXPRESS_IXSCAN",
+          "indexName": "cnpj_1"
+        },
+        {
+          "path": "$.stages[0].$cursor.executionStats",
+          "stage": null,
+          "nReturned": 1,
+          "executionTimeMillis": 4,
+          "totalKeysExamined": 1,
+          "totalDocsExamined": 1
+        },
+        {
+          "path": "$.stages[0].$cursor.executionStats.executionStages",
+          "stage": "EXPRESS_IXSCAN",
+          "indexName": "cnpj_1",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 0
+        },
+        {
+          "path": "$.stages[1]",
+          "stage": "$graphLookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2,
+          "usedDisk": false,
+          "spills": 0
+        },
+        {
+          "path": "$.stages[2]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[3]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2,
+          "totalDocsExamined": 0,
+          "totalKeysExamined": 0,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "owned_id_1"
+          ]
+        },
+        {
+          "path": "$.stages[4]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[5]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[6]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[7]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[8]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[9]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[10]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2,
+          "totalDocsExamined": 0,
+          "totalKeysExamined": 0,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "owned_id_1"
+          ]
+        },
+        {
+          "path": "$.stages[11]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[12]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[13]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[14]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3,
+          "totalDocsExamined": 3,
+          "totalKeysExamined": 3,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "_id_",
+            "owner_id_1"
+          ]
+        },
+        {
+          "path": "$.stages[15]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[16]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[17]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[18]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[19]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[20]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[21]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3,
+          "totalDocsExamined": 3,
+          "totalKeysExamined": 3,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "_id_"
+          ]
+        },
+        {
+          "path": "$.stages[22]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 4,
+          "totalDocsExamined": 0,
+          "totalKeysExamined": 0,
+          "collectionScans": 0,
+          "indexesUsed": []
+        },
+        {
+          "path": "$.stages[23]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 4,
+          "totalDocsExamined": 0,
+          "totalKeysExamined": 0,
+          "collectionScans": 0,
+          "indexesUsed": []
+        },
+        {
+          "path": "$.stages[24]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 4,
+          "totalDocsExamined": 3,
+          "totalKeysExamined": 3,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "company_id_1"
+          ]
+        },
+        {
+          "path": "$.stages[25]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 4
+        }
+      ]
+    },
+    {
+      "depth": 4,
+      "branching": 1,
+      "fixture_companies": 5,
+      "fixture_edges": 4,
+      "returned_companies": 5,
+      "returned_edges": 4,
+      "complete": true,
+      "reasons": [],
+      "correct": true,
+      "traversal_matches": {
+        "up": 4,
+        "down": 4,
+        "note": "Correspondências de arestas por direção; uma aresta pode aparecer nos dois sentidos. Descida contada após o cap de arestas por raiz."
+      },
+      "samples_ms": [
+        397.532,
+        401.088,
+        403.385,
+        405.513,
+        405.661,
+        411.366,
+        411.738,
+        426.371,
+        468.05,
+        470.173
+      ],
+      "p50_ms": 408.51,
+      "p95_ms": 470.17,
+      "explain": [
+        {
+          "path": "$.stages[0]",
+          "stage": "$cursor",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 1
+        },
+        {
+          "path": "$.stages[0].$cursor.queryPlanner.winningPlan",
+          "stage": "EXPRESS_IXSCAN",
+          "indexName": "cnpj_1"
+        },
+        {
+          "path": "$.stages[0].$cursor.executionStats",
+          "stage": null,
+          "nReturned": 1,
+          "executionTimeMillis": 4,
+          "totalKeysExamined": 1,
+          "totalDocsExamined": 1
+        },
+        {
+          "path": "$.stages[0].$cursor.executionStats.executionStages",
+          "stage": "EXPRESS_IXSCAN",
+          "indexName": "cnpj_1",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 0
+        },
+        {
+          "path": "$.stages[1]",
+          "stage": "$graphLookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 1,
+          "usedDisk": false,
+          "spills": 0
+        },
+        {
+          "path": "$.stages[2]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 1
+        },
+        {
+          "path": "$.stages[3]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2,
+          "totalDocsExamined": 0,
+          "totalKeysExamined": 0,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "owned_id_1"
+          ]
+        },
+        {
+          "path": "$.stages[4]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[5]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[6]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[7]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[8]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[9]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[10]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2,
+          "totalDocsExamined": 0,
+          "totalKeysExamined": 0,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "owned_id_1"
+          ]
+        },
+        {
+          "path": "$.stages[11]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[12]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[13]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[14]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3,
+          "totalDocsExamined": 5,
+          "totalKeysExamined": 5,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "_id_",
+            "owner_id_1"
+          ]
+        },
+        {
+          "path": "$.stages[15]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[16]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[17]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[18]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[19]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[20]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[21]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3,
+          "totalDocsExamined": 5,
+          "totalKeysExamined": 5,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "_id_"
+          ]
+        },
+        {
+          "path": "$.stages[22]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3,
+          "totalDocsExamined": 0,
+          "totalKeysExamined": 0,
+          "collectionScans": 0,
+          "indexesUsed": []
+        },
+        {
+          "path": "$.stages[23]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3,
+          "totalDocsExamined": 0,
+          "totalKeysExamined": 0,
+          "collectionScans": 0,
+          "indexesUsed": []
+        },
+        {
+          "path": "$.stages[24]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3,
+          "totalDocsExamined": 5,
+          "totalKeysExamined": 5,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "company_id_1"
+          ]
+        },
+        {
+          "path": "$.stages[25]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        }
+      ]
+    },
+    {
+      "depth": 6,
+      "branching": 1,
+      "fixture_companies": 7,
+      "fixture_edges": 6,
+      "returned_companies": 7,
+      "returned_edges": 6,
+      "complete": true,
+      "reasons": [],
+      "correct": true,
+      "traversal_matches": {
+        "up": 6,
+        "down": 6,
+        "note": "Correspondências de arestas por direção; uma aresta pode aparecer nos dois sentidos. Descida contada após o cap de arestas por raiz."
+      },
+      "samples_ms": [
+        390.864,
+        391.503,
+        396.309,
+        396.728,
+        404.506,
+        414.901,
+        420.849,
+        431.015,
+        469.621,
+        487.518
+      ],
+      "p50_ms": 409.7,
+      "p95_ms": 487.52,
+      "explain": [
+        {
+          "path": "$.stages[0]",
+          "stage": "$cursor",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 1
+        },
+        {
+          "path": "$.stages[0].$cursor.queryPlanner.winningPlan",
+          "stage": "EXPRESS_IXSCAN",
+          "indexName": "cnpj_1"
+        },
+        {
+          "path": "$.stages[0].$cursor.executionStats",
+          "stage": null,
+          "nReturned": 1,
+          "executionTimeMillis": 4,
+          "totalKeysExamined": 1,
+          "totalDocsExamined": 1
+        },
+        {
+          "path": "$.stages[0].$cursor.executionStats.executionStages",
+          "stage": "EXPRESS_IXSCAN",
+          "indexName": "cnpj_1",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 0
+        },
+        {
+          "path": "$.stages[1]",
+          "stage": "$graphLookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2,
+          "usedDisk": false,
+          "spills": 0
+        },
+        {
+          "path": "$.stages[2]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[3]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2,
+          "totalDocsExamined": 0,
+          "totalKeysExamined": 0,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "owned_id_1"
+          ]
+        },
+        {
+          "path": "$.stages[4]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[5]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[6]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[7]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[8]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[9]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[10]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2,
+          "totalDocsExamined": 0,
+          "totalKeysExamined": 0,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "owned_id_1"
+          ]
+        },
+        {
+          "path": "$.stages[11]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[12]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[13]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[14]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3,
+          "totalDocsExamined": 7,
+          "totalKeysExamined": 7,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "_id_",
+            "owner_id_1"
+          ]
+        },
+        {
+          "path": "$.stages[15]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[16]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[17]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[18]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[19]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[20]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[21]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3,
+          "totalDocsExamined": 7,
+          "totalKeysExamined": 7,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "_id_"
+          ]
+        },
+        {
+          "path": "$.stages[22]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 4,
+          "totalDocsExamined": 0,
+          "totalKeysExamined": 0,
+          "collectionScans": 0,
+          "indexesUsed": []
+        },
+        {
+          "path": "$.stages[23]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 4,
+          "totalDocsExamined": 0,
+          "totalKeysExamined": 0,
+          "collectionScans": 0,
+          "indexesUsed": []
+        },
+        {
+          "path": "$.stages[24]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 4,
+          "totalDocsExamined": 7,
+          "totalKeysExamined": 7,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "company_id_1"
+          ]
+        },
+        {
+          "path": "$.stages[25]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 4
+        }
+      ]
+    },
+    {
+      "depth": 1,
+      "branching": 2,
+      "fixture_companies": 3,
+      "fixture_edges": 2,
+      "returned_companies": 3,
+      "returned_edges": 2,
+      "complete": true,
+      "reasons": [],
+      "correct": true,
+      "traversal_matches": {
+        "up": 1,
+        "down": 2,
+        "note": "Correspondências de arestas por direção; uma aresta pode aparecer nos dois sentidos. Descida contada após o cap de arestas por raiz."
+      },
+      "samples_ms": [
+        384.263,
+        386.932,
+        395.549,
+        397.265,
+        397.518,
+        398.842,
+        400.2,
+        400.406,
+        407.408,
+        463.736
+      ],
+      "p50_ms": 398.18,
+      "p95_ms": 463.74,
+      "explain": [
+        {
+          "path": "$.stages[0]",
+          "stage": "$cursor",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 1
+        },
+        {
+          "path": "$.stages[0].$cursor.queryPlanner.winningPlan",
+          "stage": "EXPRESS_IXSCAN",
+          "indexName": "cnpj_1"
+        },
+        {
+          "path": "$.stages[0].$cursor.executionStats",
+          "stage": null,
+          "nReturned": 1,
+          "executionTimeMillis": 3,
+          "totalKeysExamined": 1,
+          "totalDocsExamined": 1
+        },
+        {
+          "path": "$.stages[0].$cursor.executionStats.executionStages",
+          "stage": "EXPRESS_IXSCAN",
+          "indexName": "cnpj_1",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 0
+        },
+        {
+          "path": "$.stages[1]",
+          "stage": "$graphLookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2,
+          "usedDisk": false,
+          "spills": 0
+        },
+        {
+          "path": "$.stages[2]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[3]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2,
+          "totalDocsExamined": 0,
+          "totalKeysExamined": 0,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "owned_id_1"
+          ]
+        },
+        {
+          "path": "$.stages[4]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[5]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[6]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[7]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[8]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[9]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[10]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2,
+          "totalDocsExamined": 0,
+          "totalKeysExamined": 0,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "owned_id_1"
+          ]
+        },
+        {
+          "path": "$.stages[11]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[12]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[13]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 2
+        },
+        {
+          "path": "$.stages[14]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3,
+          "totalDocsExamined": 3,
+          "totalKeysExamined": 4,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "_id_",
+            "owner_id_1"
+          ]
+        },
+        {
+          "path": "$.stages[15]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[16]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[17]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[18]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[19]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[20]",
+          "stage": "$set",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        },
+        {
+          "path": "$.stages[21]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3,
+          "totalDocsExamined": 3,
+          "totalKeysExamined": 4,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "_id_"
+          ]
+        },
+        {
+          "path": "$.stages[22]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3,
+          "totalDocsExamined": 0,
+          "totalKeysExamined": 0,
+          "collectionScans": 0,
+          "indexesUsed": []
+        },
+        {
+          "path": "$.stages[23]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3,
+          "totalDocsExamined": 0,
+          "totalKeysExamined": 0,
+          "collectionScans": 0,
+          "indexesUsed": []
+        },
+        {
+          "path": "$.stages[24]",
+          "stage": "$lookup",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3,
+          "totalDocsExamined": 3,
+          "totalKeysExamined": 4,
+          "collectionScans": 0,
+          "indexesUsed": [
+            "company_id_1"
+          ]
+        },
+        {
+          "path": "$.stages[25]",
+          "stage": "$project",
+          "nReturned": 1,
+          "executionTimeMillisEstimate": 3
+        }
+      ]
+    },
+    {
+      "depth": 2,
+      "branching": 2,
+      "fixture_companies": 7,
+      "fixture_edges": 6,
+      "returned_companies": 7,
+      "returned_edges": 6,
+      "complete": true,
+      "reasons": [],
+      "correct": true,
+      "traversal_matches": {
+        "up": 2,
+        "down": 6,
+        "note": "Correspondências de arestas por direção; uma aresta pode aparecer nos dois sentidos. Descida contada após o cap de arestas por raiz."
+      },
+      "samples_ms": [
+        396.234,
+        396.623,
+        407.066,
+        407.403,
+        409.398,
+        409.518,
+        411.439,
+        413.679,
+        413.766,
+        424.474
+      ],
+      "p50_ms": 409.46,
+      "p95_ms": 424.47,
       "explain": [
         {
           "path": "$.stages[0]",
@@ -3840,1252 +5086,7 @@
           "path": "$.stages[14]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5,
-          "totalDocsExamined": 2,
-          "totalKeysExamined": 2,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "_id_",
-            "owner_id_1"
-          ]
-        },
-        {
-          "path": "$.stages[15]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 5
-        },
-        {
-          "path": "$.stages[16]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 5
-        },
-        {
-          "path": "$.stages[17]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 5
-        },
-        {
-          "path": "$.stages[18]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 5
-        },
-        {
-          "path": "$.stages[19]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 5
-        },
-        {
-          "path": "$.stages[20]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 5
-        },
-        {
-          "path": "$.stages[21]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 5,
-          "totalDocsExamined": 2,
-          "totalKeysExamined": 2,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "_id_"
-          ]
-        },
-        {
-          "path": "$.stages[22]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 5,
-          "totalDocsExamined": 0,
-          "totalKeysExamined": 0,
-          "collectionScans": 0,
-          "indexesUsed": []
-        },
-        {
-          "path": "$.stages[23]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 5,
-          "totalDocsExamined": 0,
-          "totalKeysExamined": 0,
-          "collectionScans": 0,
-          "indexesUsed": []
-        },
-        {
-          "path": "$.stages[24]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 6,
-          "totalDocsExamined": 2,
-          "totalKeysExamined": 2,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "company_id_1"
-          ]
-        },
-        {
-          "path": "$.stages[25]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 6
-        }
-      ]
-    },
-    {
-      "depth": 2,
-      "branching": 1,
-      "fixture_companies": 3,
-      "fixture_edges": 2,
-      "returned_companies": 3,
-      "returned_edges": 2,
-      "complete": true,
-      "reasons": [],
-      "correct": true,
-      "traversal_matches": {
-        "up": 2,
-        "down": 2,
-        "note": "Correspondências de arestas por direção; uma aresta pode aparecer nos dois sentidos. Descida contada após o cap de arestas por raiz."
-      },
-      "samples_ms": [
-        516.489,
-        518.925,
-        535.377,
-        542.296,
-        544.639,
-        551.299,
-        552.621,
-        556.156,
-        565.935,
-        569.162
-      ],
-      "p50_ms": 547.97,
-      "p95_ms": 569.16,
-      "explain": [
-        {
-          "path": "$.stages[0]",
-          "stage": "$cursor",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[0].$cursor.queryPlanner.winningPlan",
-          "stage": "EXPRESS_IXSCAN",
-          "indexName": "cnpj_1"
-        },
-        {
-          "path": "$.stages[0].$cursor.executionStats",
-          "stage": null,
-          "nReturned": 1,
-          "executionTimeMillis": 4,
-          "totalKeysExamined": 1,
-          "totalDocsExamined": 1
-        },
-        {
-          "path": "$.stages[0].$cursor.executionStats.executionStages",
-          "stage": "EXPRESS_IXSCAN",
-          "indexName": "cnpj_1",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 0
-        },
-        {
-          "path": "$.stages[1]",
-          "stage": "$graphLookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
-          "usedDisk": false,
-          "spills": 0
-        },
-        {
-          "path": "$.stages[2]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[3]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
-          "totalDocsExamined": 0,
-          "totalKeysExamined": 0,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "owned_id_1"
-          ]
-        },
-        {
-          "path": "$.stages[4]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[5]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[6]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[7]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[8]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[9]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[10]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
-          "totalDocsExamined": 0,
-          "totalKeysExamined": 0,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "owned_id_1"
-          ]
-        },
-        {
-          "path": "$.stages[11]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[12]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[13]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[14]",
-          "stage": "$lookup",
-          "nReturned": 1,
           "executionTimeMillisEstimate": 4,
-          "totalDocsExamined": 3,
-          "totalKeysExamined": 3,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "_id_",
-            "owner_id_1"
-          ]
-        },
-        {
-          "path": "$.stages[15]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        },
-        {
-          "path": "$.stages[16]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        },
-        {
-          "path": "$.stages[17]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        },
-        {
-          "path": "$.stages[18]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        },
-        {
-          "path": "$.stages[19]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        },
-        {
-          "path": "$.stages[20]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        },
-        {
-          "path": "$.stages[21]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
-          "totalDocsExamined": 3,
-          "totalKeysExamined": 3,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "_id_"
-          ]
-        },
-        {
-          "path": "$.stages[22]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
-          "totalDocsExamined": 0,
-          "totalKeysExamined": 0,
-          "collectionScans": 0,
-          "indexesUsed": []
-        },
-        {
-          "path": "$.stages[23]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
-          "totalDocsExamined": 0,
-          "totalKeysExamined": 0,
-          "collectionScans": 0,
-          "indexesUsed": []
-        },
-        {
-          "path": "$.stages[24]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
-          "totalDocsExamined": 3,
-          "totalKeysExamined": 3,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "company_id_1"
-          ]
-        },
-        {
-          "path": "$.stages[25]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        }
-      ]
-    },
-    {
-      "depth": 4,
-      "branching": 1,
-      "fixture_companies": 5,
-      "fixture_edges": 4,
-      "returned_companies": 5,
-      "returned_edges": 4,
-      "complete": true,
-      "reasons": [],
-      "correct": true,
-      "traversal_matches": {
-        "up": 4,
-        "down": 4,
-        "note": "Correspondências de arestas por direção; uma aresta pode aparecer nos dois sentidos. Descida contada após o cap de arestas por raiz."
-      },
-      "samples_ms": [
-        543.732,
-        550.455,
-        551.841,
-        554.318,
-        554.469,
-        558.913,
-        563.201,
-        570.492,
-        572.844,
-        644.056
-      ],
-      "p50_ms": 556.69,
-      "p95_ms": 644.06,
-      "explain": [
-        {
-          "path": "$.stages[0]",
-          "stage": "$cursor",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[0].$cursor.queryPlanner.winningPlan",
-          "stage": "EXPRESS_IXSCAN",
-          "indexName": "cnpj_1"
-        },
-        {
-          "path": "$.stages[0].$cursor.executionStats",
-          "stage": null,
-          "nReturned": 1,
-          "executionTimeMillis": 3,
-          "totalKeysExamined": 1,
-          "totalDocsExamined": 1
-        },
-        {
-          "path": "$.stages[0].$cursor.executionStats.executionStages",
-          "stage": "EXPRESS_IXSCAN",
-          "indexName": "cnpj_1",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 0
-        },
-        {
-          "path": "$.stages[1]",
-          "stage": "$graphLookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
-          "usedDisk": false,
-          "spills": 0
-        },
-        {
-          "path": "$.stages[2]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[3]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
-          "totalDocsExamined": 0,
-          "totalKeysExamined": 0,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "owned_id_1"
-          ]
-        },
-        {
-          "path": "$.stages[4]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[5]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[6]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[7]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[8]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[9]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[10]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
-          "totalDocsExamined": 0,
-          "totalKeysExamined": 0,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "owned_id_1"
-          ]
-        },
-        {
-          "path": "$.stages[11]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[12]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[13]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[14]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
-          "totalDocsExamined": 5,
-          "totalKeysExamined": 5,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "_id_",
-            "owner_id_1"
-          ]
-        },
-        {
-          "path": "$.stages[15]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        },
-        {
-          "path": "$.stages[16]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        },
-        {
-          "path": "$.stages[17]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        },
-        {
-          "path": "$.stages[18]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        },
-        {
-          "path": "$.stages[19]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        },
-        {
-          "path": "$.stages[20]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        },
-        {
-          "path": "$.stages[21]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
-          "totalDocsExamined": 5,
-          "totalKeysExamined": 5,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "_id_"
-          ]
-        },
-        {
-          "path": "$.stages[22]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
-          "totalDocsExamined": 0,
-          "totalKeysExamined": 0,
-          "collectionScans": 0,
-          "indexesUsed": []
-        },
-        {
-          "path": "$.stages[23]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
-          "totalDocsExamined": 0,
-          "totalKeysExamined": 0,
-          "collectionScans": 0,
-          "indexesUsed": []
-        },
-        {
-          "path": "$.stages[24]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
-          "totalDocsExamined": 5,
-          "totalKeysExamined": 5,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "company_id_1"
-          ]
-        },
-        {
-          "path": "$.stages[25]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        }
-      ]
-    },
-    {
-      "depth": 6,
-      "branching": 1,
-      "fixture_companies": 7,
-      "fixture_edges": 6,
-      "returned_companies": 7,
-      "returned_edges": 6,
-      "complete": true,
-      "reasons": [],
-      "correct": true,
-      "traversal_matches": {
-        "up": 6,
-        "down": 6,
-        "note": "Correspondências de arestas por direção; uma aresta pode aparecer nos dois sentidos. Descida contada após o cap de arestas por raiz."
-      },
-      "samples_ms": [
-        543.994,
-        552.333,
-        555.083,
-        560.881,
-        561.029,
-        561.285,
-        561.328,
-        568.934,
-        570.688,
-        570.901
-      ],
-      "p50_ms": 561.16,
-      "p95_ms": 570.9,
-      "explain": [
-        {
-          "path": "$.stages[0]",
-          "stage": "$cursor",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[0].$cursor.queryPlanner.winningPlan",
-          "stage": "EXPRESS_IXSCAN",
-          "indexName": "cnpj_1"
-        },
-        {
-          "path": "$.stages[0].$cursor.executionStats",
-          "stage": null,
-          "nReturned": 1,
-          "executionTimeMillis": 4,
-          "totalKeysExamined": 1,
-          "totalDocsExamined": 1
-        },
-        {
-          "path": "$.stages[0].$cursor.executionStats.executionStages",
-          "stage": "EXPRESS_IXSCAN",
-          "indexName": "cnpj_1",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 0
-        },
-        {
-          "path": "$.stages[1]",
-          "stage": "$graphLookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
-          "usedDisk": false,
-          "spills": 0
-        },
-        {
-          "path": "$.stages[2]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[3]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
-          "totalDocsExamined": 0,
-          "totalKeysExamined": 0,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "owned_id_1"
-          ]
-        },
-        {
-          "path": "$.stages[4]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[5]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[6]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[7]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[8]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[9]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[10]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
-          "totalDocsExamined": 0,
-          "totalKeysExamined": 0,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "owned_id_1"
-          ]
-        },
-        {
-          "path": "$.stages[11]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[12]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[13]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[14]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
-          "totalDocsExamined": 7,
-          "totalKeysExamined": 7,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "_id_",
-            "owner_id_1"
-          ]
-        },
-        {
-          "path": "$.stages[15]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        },
-        {
-          "path": "$.stages[16]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        },
-        {
-          "path": "$.stages[17]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        },
-        {
-          "path": "$.stages[18]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        },
-        {
-          "path": "$.stages[19]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        },
-        {
-          "path": "$.stages[20]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        },
-        {
-          "path": "$.stages[21]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
-          "totalDocsExamined": 7,
-          "totalKeysExamined": 7,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "_id_"
-          ]
-        },
-        {
-          "path": "$.stages[22]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
-          "totalDocsExamined": 0,
-          "totalKeysExamined": 0,
-          "collectionScans": 0,
-          "indexesUsed": []
-        },
-        {
-          "path": "$.stages[23]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
-          "totalDocsExamined": 0,
-          "totalKeysExamined": 0,
-          "collectionScans": 0,
-          "indexesUsed": []
-        },
-        {
-          "path": "$.stages[24]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 5,
-          "totalDocsExamined": 7,
-          "totalKeysExamined": 7,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "company_id_1"
-          ]
-        },
-        {
-          "path": "$.stages[25]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 5
-        }
-      ]
-    },
-    {
-      "depth": 1,
-      "branching": 2,
-      "fixture_companies": 3,
-      "fixture_edges": 2,
-      "returned_companies": 3,
-      "returned_edges": 2,
-      "complete": true,
-      "reasons": [],
-      "correct": true,
-      "traversal_matches": {
-        "up": 1,
-        "down": 2,
-        "note": "Correspondências de arestas por direção; uma aresta pode aparecer nos dois sentidos. Descida contada após o cap de arestas por raiz."
-      },
-      "samples_ms": [
-        538.475,
-        545.758,
-        548.062,
-        550.89,
-        553.165,
-        563.128,
-        567.561,
-        574.678,
-        576.098,
-        612.342
-      ],
-      "p50_ms": 558.15,
-      "p95_ms": 612.34,
-      "explain": [
-        {
-          "path": "$.stages[0]",
-          "stage": "$cursor",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[0].$cursor.queryPlanner.winningPlan",
-          "stage": "EXPRESS_IXSCAN",
-          "indexName": "cnpj_1"
-        },
-        {
-          "path": "$.stages[0].$cursor.executionStats",
-          "stage": null,
-          "nReturned": 1,
-          "executionTimeMillis": 3,
-          "totalKeysExamined": 1,
-          "totalDocsExamined": 1
-        },
-        {
-          "path": "$.stages[0].$cursor.executionStats.executionStages",
-          "stage": "EXPRESS_IXSCAN",
-          "indexName": "cnpj_1",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 0
-        },
-        {
-          "path": "$.stages[1]",
-          "stage": "$graphLookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
-          "usedDisk": false,
-          "spills": 0
-        },
-        {
-          "path": "$.stages[2]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[3]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
-          "totalDocsExamined": 0,
-          "totalKeysExamined": 0,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "owned_id_1"
-          ]
-        },
-        {
-          "path": "$.stages[4]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[5]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[6]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[7]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[8]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[9]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[10]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
-          "totalDocsExamined": 0,
-          "totalKeysExamined": 0,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "owned_id_1"
-          ]
-        },
-        {
-          "path": "$.stages[11]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[12]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[13]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[14]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
-          "totalDocsExamined": 3,
-          "totalKeysExamined": 4,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "_id_",
-            "owner_id_1"
-          ]
-        },
-        {
-          "path": "$.stages[15]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[16]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[17]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[18]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[19]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[20]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3
-        },
-        {
-          "path": "$.stages[21]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
-          "totalDocsExamined": 3,
-          "totalKeysExamined": 4,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "_id_"
-          ]
-        },
-        {
-          "path": "$.stages[22]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
-          "totalDocsExamined": 0,
-          "totalKeysExamined": 0,
-          "collectionScans": 0,
-          "indexesUsed": []
-        },
-        {
-          "path": "$.stages[23]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
-          "totalDocsExamined": 0,
-          "totalKeysExamined": 0,
-          "collectionScans": 0,
-          "indexesUsed": []
-        },
-        {
-          "path": "$.stages[24]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
-          "totalDocsExamined": 3,
-          "totalKeysExamined": 4,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "company_id_1"
-          ]
-        },
-        {
-          "path": "$.stages[25]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 4
-        }
-      ]
-    },
-    {
-      "depth": 2,
-      "branching": 2,
-      "fixture_companies": 7,
-      "fixture_edges": 6,
-      "returned_companies": 7,
-      "returned_edges": 6,
-      "complete": true,
-      "reasons": [],
-      "correct": true,
-      "traversal_matches": {
-        "up": 2,
-        "down": 6,
-        "note": "Correspondências de arestas por direção; uma aresta pode aparecer nos dois sentidos. Descida contada após o cap de arestas por raiz."
-      },
-      "samples_ms": [
-        534.301,
-        556.001,
-        557.137,
-        560.36,
-        560.63,
-        566.723,
-        567.509,
-        570.468,
-        577.785,
-        578.417
-      ],
-      "p50_ms": 563.68,
-      "p95_ms": 578.42,
-      "explain": [
-        {
-          "path": "$.stages[0]",
-          "stage": "$cursor",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 1
-        },
-        {
-          "path": "$.stages[0].$cursor.queryPlanner.winningPlan",
-          "stage": "EXPRESS_IXSCAN",
-          "indexName": "cnpj_1"
-        },
-        {
-          "path": "$.stages[0].$cursor.executionStats",
-          "stage": null,
-          "nReturned": 1,
-          "executionTimeMillis": 3,
-          "totalKeysExamined": 1,
-          "totalDocsExamined": 1
-        },
-        {
-          "path": "$.stages[0].$cursor.executionStats.executionStages",
-          "stage": "EXPRESS_IXSCAN",
-          "indexName": "cnpj_1",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 0
-        },
-        {
-          "path": "$.stages[1]",
-          "stage": "$graphLookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
-          "usedDisk": false,
-          "spills": 0
-        },
-        {
-          "path": "$.stages[2]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[3]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
-          "totalDocsExamined": 0,
-          "totalKeysExamined": 0,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "owned_id_1"
-          ]
-        },
-        {
-          "path": "$.stages[4]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[5]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[6]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[7]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[8]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[9]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[10]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
-          "totalDocsExamined": 0,
-          "totalKeysExamined": 0,
-          "collectionScans": 0,
-          "indexesUsed": [
-            "owned_id_1"
-          ]
-        },
-        {
-          "path": "$.stages[11]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[12]",
-          "stage": "$set",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[13]",
-          "stage": "$project",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 2
-        },
-        {
-          "path": "$.stages[14]",
-          "stage": "$lookup",
-          "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
           "totalDocsExamined": 7,
           "totalKeysExamined": 9,
           "collectionScans": 0,
@@ -5098,43 +5099,43 @@
           "path": "$.stages[15]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[16]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[17]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[18]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[19]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[20]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[21]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
+          "executionTimeMillisEstimate": 4,
           "totalDocsExamined": 7,
           "totalKeysExamined": 8,
           "collectionScans": 0,
@@ -5146,7 +5147,7 @@
           "path": "$.stages[22]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
+          "executionTimeMillisEstimate": 5,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -5156,7 +5157,7 @@
           "path": "$.stages[23]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
+          "executionTimeMillisEstimate": 5,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -5166,7 +5167,7 @@
           "path": "$.stages[24]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
+          "executionTimeMillisEstimate": 5,
           "totalDocsExamined": 7,
           "totalKeysExamined": 8,
           "collectionScans": 0,
@@ -5178,7 +5179,7 @@
           "path": "$.stages[25]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 5
         }
       ]
     },
@@ -5198,19 +5199,19 @@
         "note": "Correspondências de arestas por direção; uma aresta pode aparecer nos dois sentidos. Descida contada após o cap de arestas por raiz."
       },
       "samples_ms": [
-        550.446,
-        561.995,
-        562.608,
-        572.891,
-        575.841,
-        575.884,
-        579.27,
-        580.94,
-        582.244,
-        663.056
+        445.116,
+        461.476,
+        481.534,
+        488.156,
+        504.903,
+        524.441,
+        528.325,
+        531.841,
+        555.611,
+        570.833
       ],
-      "p50_ms": 575.86,
-      "p95_ms": 663.06,
+      "p50_ms": 514.67,
+      "p95_ms": 570.83,
       "explain": [
         {
           "path": "$.stages[0]",
@@ -5242,7 +5243,7 @@
           "path": "$.stages[1]",
           "stage": "$graphLookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1,
+          "executionTimeMillisEstimate": 2,
           "usedDisk": false,
           "spills": 0
         },
@@ -5250,7 +5251,7 @@
           "path": "$.stages[2]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 2
         },
         {
           "path": "$.stages[3]",
@@ -5447,19 +5448,19 @@
         "note": "Correspondências de arestas por direção; uma aresta pode aparecer nos dois sentidos. Descida contada após o cap de arestas por raiz."
       },
       "samples_ms": [
-        656.619,
-        667.94,
-        681.12,
-        684.551,
-        689.247,
-        717.549,
-        722.698,
-        727.435,
-        740.301,
-        766.836
+        454.843,
+        461.271,
+        472.882,
+        475.038,
+        489.372,
+        497.969,
+        537.03,
+        554.03,
+        556.601,
+        605.114
       ],
-      "p50_ms": 703.4,
-      "p95_ms": 766.84,
+      "p50_ms": 493.67,
+      "p95_ms": 605.11,
       "explain": [
         {
           "path": "$.stages[0]",
@@ -5476,7 +5477,7 @@
           "path": "$.stages[0].$cursor.executionStats",
           "stage": null,
           "nReturned": 1,
-          "executionTimeMillis": 6,
+          "executionTimeMillis": 7,
           "totalKeysExamined": 1,
           "totalDocsExamined": 1
         },
@@ -5644,7 +5645,7 @@
           "path": "$.stages[22]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5,
+          "executionTimeMillisEstimate": 6,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -5654,7 +5655,7 @@
           "path": "$.stages[23]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5,
+          "executionTimeMillisEstimate": 6,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -5696,25 +5697,25 @@
         "note": "Correspondências de arestas por direção; uma aresta pode aparecer nos dois sentidos. Descida contada após o cap de arestas por raiz."
       },
       "samples_ms": [
-        536.796,
-        556.427,
-        567.994,
-        570.512,
-        577.274,
-        587.883,
-        587.973,
-        589.407,
-        596.386,
-        603.895
+        382.213,
+        397.022,
+        398.377,
+        401.076,
+        405.953,
+        407.883,
+        412.876,
+        418.181,
+        471.529,
+        473.009
       ],
-      "p50_ms": 582.58,
-      "p95_ms": 603.89,
+      "p50_ms": 406.92,
+      "p95_ms": 473.01,
       "explain": [
         {
           "path": "$.stages[0]",
           "stage": "$cursor",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 0
         },
         {
           "path": "$.stages[0].$cursor.queryPlanner.winningPlan",
@@ -5725,7 +5726,7 @@
           "path": "$.stages[0].$cursor.executionStats",
           "stage": null,
           "nReturned": 1,
-          "executionTimeMillis": 4,
+          "executionTimeMillis": 5,
           "totalKeysExamined": 1,
           "totalDocsExamined": 1
         },
@@ -5740,7 +5741,7 @@
           "path": "$.stages[1]",
           "stage": "$graphLookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1,
+          "executionTimeMillisEstimate": 0,
           "usedDisk": false,
           "spills": 0
         },
@@ -5748,13 +5749,13 @@
           "path": "$.stages[2]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 0
         },
         {
           "path": "$.stages[3]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1,
+          "executionTimeMillisEstimate": 0,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -5766,43 +5767,43 @@
           "path": "$.stages[4]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 0
         },
         {
           "path": "$.stages[5]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 0
         },
         {
           "path": "$.stages[6]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 0
         },
         {
           "path": "$.stages[7]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 0
         },
         {
           "path": "$.stages[8]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 0
         },
         {
           "path": "$.stages[9]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 0
         },
         {
           "path": "$.stages[10]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
+          "executionTimeMillisEstimate": 0,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -5814,25 +5815,25 @@
           "path": "$.stages[11]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 0
         },
         {
           "path": "$.stages[12]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 0
         },
         {
           "path": "$.stages[13]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 0
         },
         {
           "path": "$.stages[14]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
+          "executionTimeMillisEstimate": 2,
           "totalDocsExamined": 4,
           "totalKeysExamined": 5,
           "collectionScans": 0,
@@ -5845,43 +5846,43 @@
           "path": "$.stages[15]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 2
         },
         {
           "path": "$.stages[16]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 2
         },
         {
           "path": "$.stages[17]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 2
         },
         {
           "path": "$.stages[18]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 2
         },
         {
           "path": "$.stages[19]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 2
         },
         {
           "path": "$.stages[20]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 2
         },
         {
           "path": "$.stages[21]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
+          "executionTimeMillisEstimate": 3,
           "totalDocsExamined": 4,
           "totalKeysExamined": 5,
           "collectionScans": 0,
@@ -5893,7 +5894,7 @@
           "path": "$.stages[22]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
+          "executionTimeMillisEstimate": 3,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -5903,7 +5904,7 @@
           "path": "$.stages[23]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
+          "executionTimeMillisEstimate": 3,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -5913,7 +5914,7 @@
           "path": "$.stages[24]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
+          "executionTimeMillisEstimate": 3,
           "totalDocsExamined": 4,
           "totalKeysExamined": 5,
           "collectionScans": 0,
@@ -5925,7 +5926,7 @@
           "path": "$.stages[25]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4
+          "executionTimeMillisEstimate": 3
         }
       ]
     },
@@ -5945,19 +5946,19 @@
         "note": "Correspondências de arestas por direção; uma aresta pode aparecer nos dois sentidos. Descida contada após o cap de arestas por raiz."
       },
       "samples_ms": [
-        585.225,
-        648.911,
-        748.232,
-        765.346,
-        777.985,
-        785.808,
-        791.775,
-        799.88,
-        800.172,
-        890.06
+        391.671,
+        393.693,
+        394.617,
+        397.926,
+        409.436,
+        409.7,
+        410.31,
+        412.948,
+        422.462,
+        423.612
       ],
-      "p50_ms": 781.9,
-      "p95_ms": 890.06,
+      "p50_ms": 409.57,
+      "p95_ms": 423.61,
       "explain": [
         {
           "path": "$.stages[0]",
@@ -5974,7 +5975,7 @@
           "path": "$.stages[0].$cursor.executionStats",
           "stage": null,
           "nReturned": 1,
-          "executionTimeMillis": 4,
+          "executionTimeMillis": 5,
           "totalKeysExamined": 1,
           "totalDocsExamined": 1
         },
@@ -6081,7 +6082,7 @@
           "path": "$.stages[14]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
+          "executionTimeMillisEstimate": 4,
           "totalDocsExamined": 13,
           "totalKeysExamined": 16,
           "collectionScans": 0,
@@ -6094,37 +6095,37 @@
           "path": "$.stages[15]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[16]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[17]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[18]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[19]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[20]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[21]",
@@ -6152,7 +6153,7 @@
           "path": "$.stages[23]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
+          "executionTimeMillisEstimate": 5,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -6162,7 +6163,7 @@
           "path": "$.stages[24]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4,
+          "executionTimeMillisEstimate": 5,
           "totalDocsExamined": 13,
           "totalKeysExamined": 14,
           "collectionScans": 0,
@@ -6174,7 +6175,7 @@
           "path": "$.stages[25]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 4
+          "executionTimeMillisEstimate": 5
         }
       ]
     },
@@ -6194,25 +6195,25 @@
         "note": "Correspondências de arestas por direção; uma aresta pode aparecer nos dois sentidos. Descida contada após o cap de arestas por raiz."
       },
       "samples_ms": [
-        711.784,
-        726.587,
-        735.724,
-        747.039,
-        747.404,
-        751.756,
-        762.288,
-        804.743,
-        806.297,
-        824.01
+        402.439,
+        410.795,
+        411.263,
+        431.245,
+        432.809,
+        437.649,
+        460.78,
+        483.408,
+        533.057,
+        553.454
       ],
-      "p50_ms": 749.58,
-      "p95_ms": 824.01,
+      "p50_ms": 435.23,
+      "p95_ms": 553.45,
       "explain": [
         {
           "path": "$.stages[0]",
           "stage": "$cursor",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 1
         },
         {
           "path": "$.stages[0].$cursor.queryPlanner.winningPlan",
@@ -6252,7 +6253,7 @@
           "path": "$.stages[3]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
+          "executionTimeMillisEstimate": 2,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -6264,43 +6265,43 @@
           "path": "$.stages[4]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 2
         },
         {
           "path": "$.stages[5]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 2
         },
         {
           "path": "$.stages[6]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 2
         },
         {
           "path": "$.stages[7]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 2
         },
         {
           "path": "$.stages[8]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 2
         },
         {
           "path": "$.stages[9]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 2
         },
         {
           "path": "$.stages[10]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3,
+          "executionTimeMillisEstimate": 2,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -6312,25 +6313,25 @@
           "path": "$.stages[11]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 2
         },
         {
           "path": "$.stages[12]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 2
         },
         {
           "path": "$.stages[13]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 3
+          "executionTimeMillisEstimate": 2
         },
         {
           "path": "$.stages[14]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5,
+          "executionTimeMillisEstimate": 4,
           "totalDocsExamined": 121,
           "totalKeysExamined": 138,
           "collectionScans": 0,
@@ -6343,43 +6344,43 @@
           "path": "$.stages[15]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[16]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[17]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[18]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[19]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[20]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 5
+          "executionTimeMillisEstimate": 4
         },
         {
           "path": "$.stages[21]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 6,
+          "executionTimeMillisEstimate": 5,
           "totalDocsExamined": 121,
           "totalKeysExamined": 122,
           "collectionScans": 0,
@@ -6401,7 +6402,7 @@
           "path": "$.stages[23]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 7,
+          "executionTimeMillisEstimate": 6,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -6411,7 +6412,7 @@
           "path": "$.stages[24]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 7,
+          "executionTimeMillisEstimate": 6,
           "totalDocsExamined": 121,
           "totalKeysExamined": 122,
           "collectionScans": 0,
@@ -6423,7 +6424,7 @@
           "path": "$.stages[25]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 7
+          "executionTimeMillisEstimate": 6
         }
       ]
     },
@@ -6443,25 +6444,25 @@
         "note": "Correspondências de arestas por direção; uma aresta pode aparecer nos dois sentidos. Descida contada após o cap de arestas por raiz."
       },
       "samples_ms": [
-        590.423,
-        635.544,
-        694.236,
-        697.47,
-        741.024,
-        752.586,
-        759.805,
-        773.747,
-        789.294,
-        921.717
+        599.581,
+        606.043,
+        611.148,
+        615.755,
+        620.28,
+        656.382,
+        679.814,
+        699.254,
+        716.703,
+        725.767
       ],
-      "p50_ms": 746.81,
-      "p95_ms": 921.72,
+      "p50_ms": 638.33,
+      "p95_ms": 725.77,
       "explain": [
         {
           "path": "$.stages[0]",
           "stage": "$cursor",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 1
+          "executionTimeMillisEstimate": 2
         },
         {
           "path": "$.stages[0].$cursor.queryPlanner.winningPlan",
@@ -6472,7 +6473,7 @@
           "path": "$.stages[0].$cursor.executionStats",
           "stage": null,
           "nReturned": 1,
-          "executionTimeMillis": 47,
+          "executionTimeMillis": 55,
           "totalKeysExamined": 1,
           "totalDocsExamined": 1
         },
@@ -6487,7 +6488,7 @@
           "path": "$.stages[1]",
           "stage": "$graphLookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
+          "executionTimeMillisEstimate": 3,
           "usedDisk": false,
           "spills": 0
         },
@@ -6495,13 +6496,13 @@
           "path": "$.stages[2]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[3]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
+          "executionTimeMillisEstimate": 3,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -6513,43 +6514,43 @@
           "path": "$.stages[4]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[5]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[6]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[7]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[8]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[9]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[10]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
+          "executionTimeMillisEstimate": 3,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -6561,25 +6562,25 @@
           "path": "$.stages[11]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[12]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[13]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[14]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 12,
+          "executionTimeMillisEstimate": 18,
           "totalDocsExamined": 1093,
           "totalKeysExamined": 1236,
           "collectionScans": 0,
@@ -6592,43 +6593,43 @@
           "path": "$.stages[15]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 12
+          "executionTimeMillisEstimate": 19
         },
         {
           "path": "$.stages[16]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 12
+          "executionTimeMillisEstimate": 19
         },
         {
           "path": "$.stages[17]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 12
+          "executionTimeMillisEstimate": 19
         },
         {
           "path": "$.stages[18]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 12
+          "executionTimeMillisEstimate": 19
         },
         {
           "path": "$.stages[19]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 12
+          "executionTimeMillisEstimate": 19
         },
         {
           "path": "$.stages[20]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 12
+          "executionTimeMillisEstimate": 23
         },
         {
           "path": "$.stages[21]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 30,
+          "executionTimeMillisEstimate": 36,
           "totalDocsExamined": 1093,
           "totalKeysExamined": 1093,
           "collectionScans": 0,
@@ -6640,7 +6641,7 @@
           "path": "$.stages[22]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 31,
+          "executionTimeMillisEstimate": 39,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -6650,7 +6651,7 @@
           "path": "$.stages[23]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 32,
+          "executionTimeMillisEstimate": 39,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -6660,7 +6661,7 @@
           "path": "$.stages[24]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 44,
+          "executionTimeMillisEstimate": 53,
           "totalDocsExamined": 1093,
           "totalKeysExamined": 1093,
           "collectionScans": 0,
@@ -6672,7 +6673,7 @@
           "path": "$.stages[25]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 44
+          "executionTimeMillisEstimate": 53
         }
       ]
     },
@@ -6694,25 +6695,25 @@
         "note": "Correspondências de arestas por direção; uma aresta pode aparecer nos dois sentidos. Descida contada após o cap de arestas por raiz."
       },
       "samples_ms": [
-        597.161,
-        602.672,
-        603.982,
-        605.789,
-        612.94,
-        658.849,
-        733.045,
-        740.749,
-        811.299,
-        823.01
+        394.446,
+        539.457,
+        550.852,
+        552.022,
+        582.968,
+        588.717,
+        607.045,
+        633.34,
+        638.064,
+        638.7
       ],
-      "p50_ms": 635.89,
-      "p95_ms": 823.01,
+      "p50_ms": 585.84,
+      "p95_ms": 638.7,
       "explain": [
         {
           "path": "$.stages[0]",
           "stage": "$cursor",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 1
         },
         {
           "path": "$.stages[0].$cursor.queryPlanner.winningPlan",
@@ -6723,7 +6724,7 @@
           "path": "$.stages[0].$cursor.executionStats",
           "stage": null,
           "nReturned": 1,
-          "executionTimeMillis": 50,
+          "executionTimeMillis": 57,
           "totalKeysExamined": 1,
           "totalDocsExamined": 1
         },
@@ -6752,7 +6753,7 @@
           "path": "$.stages[3]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
+          "executionTimeMillisEstimate": 3,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -6764,43 +6765,43 @@
           "path": "$.stages[4]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[5]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[6]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[7]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[8]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[9]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[10]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2,
+          "executionTimeMillisEstimate": 3,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -6812,25 +6813,25 @@
           "path": "$.stages[11]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[12]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[13]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 2
+          "executionTimeMillisEstimate": 3
         },
         {
           "path": "$.stages[14]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 10,
+          "executionTimeMillisEstimate": 12,
           "totalDocsExamined": 1201,
           "totalKeysExamined": 1202,
           "collectionScans": 0,
@@ -6843,43 +6844,43 @@
           "path": "$.stages[15]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 10
+          "executionTimeMillisEstimate": 12
         },
         {
           "path": "$.stages[16]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 10
+          "executionTimeMillisEstimate": 12
         },
         {
           "path": "$.stages[17]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 10
+          "executionTimeMillisEstimate": 12
         },
         {
           "path": "$.stages[18]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 10
+          "executionTimeMillisEstimate": 12
         },
         {
           "path": "$.stages[19]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 10
+          "executionTimeMillisEstimate": 12
         },
         {
           "path": "$.stages[20]",
           "stage": "$set",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 10
+          "executionTimeMillisEstimate": 12
         },
         {
           "path": "$.stages[21]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 30,
+          "executionTimeMillisEstimate": 32,
           "totalDocsExamined": 1201,
           "totalKeysExamined": 1202,
           "collectionScans": 0,
@@ -6891,7 +6892,7 @@
           "path": "$.stages[22]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 32,
+          "executionTimeMillisEstimate": 37,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -6901,7 +6902,7 @@
           "path": "$.stages[23]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 33,
+          "executionTimeMillisEstimate": 38,
           "totalDocsExamined": 0,
           "totalKeysExamined": 0,
           "collectionScans": 0,
@@ -6911,7 +6912,7 @@
           "path": "$.stages[24]",
           "stage": "$lookup",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 50,
+          "executionTimeMillisEstimate": 51,
           "totalDocsExamined": 1201,
           "totalKeysExamined": 1202,
           "collectionScans": 0,
@@ -6923,12 +6924,11 @@
           "path": "$.stages[25]",
           "stage": "$project",
           "nReturned": 1,
-          "executionTimeMillisEstimate": 50
+          "executionTimeMillisEstimate": 51
         }
       ]
     }
   ],
   "isolated_database_removed": true,
-  "passed": true,
-  "audit_measured_at": "2026-09-30T01:24:43.884668+00:00"
+  "passed": true
 }

@@ -1,5 +1,5 @@
 {
-  "measured_at": "2026-09-30T08:47:29.290Z",
+  "measured_at": "2026-10-06T19:49:36.154Z",
   "checks": [
     {
       "test": "auditoria carrega e todos os grupos são navegáveis",
