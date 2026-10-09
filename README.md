@@ -128,6 +128,7 @@ backend/venv/bin/python tests/test_resilience.py --quick   # needs ./start.sh; r
 backend/venv/bin/python tests/http_adversarial.py          # needs ./start.sh; read-only
 backend/venv/bin/python tests/live_hardening.py            # own graph_resilience_test_<uuid>
 backend/venv/bin/python tests/live_graph_adversarial.py    # own graph_adversarial_test_<uuid>
+backend/venv/bin/python tests/live_reset_race.py           # own graph_resetrace_test_<uuid>
 backend/venv/bin/python tests/stress.py --max 64 --seconds 20
 ```
 
@@ -148,7 +149,9 @@ The live write suite creates and removes its own database. It does not reset the
 
 Analytical queries have bounded concurrency and may return 429 under saturation. Timings that include these refusals are identified in the report. The tests establish the cases exercised, not immunity to every failure.
 
-`GET /health` checks connectivity, index readiness and a reference traversal. `POST /api/demo/reset` changes the demonstration dataset; it is an explicit presenter action, not part of the read-only checks. See [the demo script](docs/demo-script.md).
+`GET /health` checks connectivity, index readiness and a reference traversal. `POST /api/demo/reset` changes the demonstration dataset; it is an explicit presenter action, not part of the read-only checks.
+
+The reset is several writes, not one transaction, so it holds a lease (`demo_control/review_lock`, 120 s, self-expiring). Opening or closing a review writes to that same document inside its transaction: while a reset runs it is refused with 409 `reset_in_progress`; a review that committed first is cleaned by the reset that follows. The reset ends by sweeping any company or exposure still flagged without a case. Before this, a review opened in a second tab mid-reset left the whole group blocked with no case to close (43 companies on the small dataset). `tests/live_reset_race.py` replays that schedule, the reverse order, an expired lease and 12 random interleavings. See [the demo script](docs/demo-script.md).
 
 ## What this does not solve
 

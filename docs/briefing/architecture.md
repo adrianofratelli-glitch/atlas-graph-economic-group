@@ -177,10 +177,10 @@ tem uma consequência prática se for esquecida.
 | GET | `/api/hierarchy/roster` | usuários de exemplo para a demo de visibilidade |
 | GET | `/api/hierarchy/{advisor_id}/portfolio` | escopo derivado descendo `reports_to`, mais a carteira consolidada |
 | GET | `/api/hierarchy/{advisor_id}/can-see/{cnpj}` | este usuário pode ver esta conta, e por quê |
-| POST | `/api/credit/review` | transação ACID multi-documento sobre o grupo inteiro; recusa segunda revisão sobre empresas já em revisão |
+| POST | `/api/credit/review` | transação ACID multi-documento sobre o grupo inteiro; recusa segunda revisão sobre empresas já em revisão e devolve 409 `reset_in_progress` durante o reset |
 | GET | `/api/credit/case/{case_id}` | o caso aberto, com o antes/depois do que a transação mudou |
-| POST | `/api/credit/close/{case_id}` | encerra um caso |
-| POST | `/api/demo/reset` | devolve o dataset ao estado pré-demo |
+| POST | `/api/credit/close/{case_id}` | encerra um caso; 409 `reset_in_progress` durante o reset |
+| POST | `/api/demo/reset` | devolve o dataset ao estado pré-demo; toma o lease `demo_control/review_lock` e devolve 409 se outro reset o segura por mais de 30 s |
 | GET | `/api/alerts/stream` | SSE alimentado pelo change stream; 503 acima de 64 conexões |
 | GET | `/api/alerts/recent` | os alertas persistidos mais recentes |
 
