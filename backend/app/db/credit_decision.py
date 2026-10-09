@@ -26,16 +26,32 @@ a primeira como casca: aberta, sem empresa nenhuma apontando para ela. Para um
 processo de crédito isso é pior do que um erro — e recusar também é o
 comportamento correto de mesa: não se abrem duas revisões sobre o mesmo grupo,
 reabre-se a que existe.
+
+## Por que o reset da demo tem lease
+
+`reset_all()` não é uma transação: são várias escritas em coleções diferentes
+(companies, credit_exposure, credit_decisions...). Sem coordenação, uma abertura
+que comitasse **entre** a limpeza de `companies` e o `delete_many` de
+`credit_decisions` deixava o grupo inteiro bloqueado e o caso apagado — revisão
+impossível de encerrar ou reabrir (reproduzido em 2026-10-08: 43 empresas
+órfãs). O reset agora toma um lease num documento (`demo_control/review_lock`)
+e a abertura e o fechamento **escrevem** nesse mesmo documento dentro da
+transação: ou a transação comita antes (e o reset espera e limpa o caso junto),
+ou ela vê o lease / sofre conflito de escrita, repete e recusa com
+`reset_in_progress`. Por último, o reset ainda varre empresas e exposições sob
+revisão que ficaram sem caso. O lease expira sozinho se o processo morrer no
+meio, para não travar a demo.
 """
 from __future__ import annotations
 
 import time
 import hmac
-from datetime import datetime, timezone
+import uuid
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from pymongo import ReadPreference
-from pymongo.errors import OperationFailure
+from pymongo.errors import DuplicateKeyError, OperationFailure
 from pymongo.read_concern import ReadConcern
 from pymongo.write_concern import WriteConcern
 
@@ -43,6 +59,69 @@ from app.config import get_settings
 from app.db.client import get_client, get_db
 
 FLAG = "under_review"
+
+CONTROL_ID = "review_lock"
+RESET_LEASE_S = 120.0
+RESET_WAIT_S = 30.0
+RESET_BUSY = "Reset da demo em curso. Aguarde alguns segundos e atualize o grupo."
+
+
+class ResetBusy(RuntimeError):
+    """Outro reset segurou o lease além do tempo de espera."""
+
+
+def _now() -> datetime:
+    return datetime.now(timezone.utc)
+
+
+def _aware(dt: datetime | None) -> datetime | None:
+    if dt is not None and dt.tzinfo is None:
+        return dt.replace(tzinfo=timezone.utc)
+    return dt
+
+
+def _ensure_control(db) -> None:
+    # Fora da transação: criar coleção/documento dentro dela é frágil.
+    db.demo_control.update_one({"_id": CONTROL_ID}, {"$setOnInsert": {"reset_until": None}}, upsert=True)
+
+
+def _guard_review_write(db, session) -> bool:
+    """Escreve no documento de controle dentro da transação; True = reset em curso.
+
+    A escrita é o que serializa: se o reset tomou o lease depois do snapshot,
+    esta escrita sofre WriteConflict e `with_transaction` repete com snapshot
+    novo; se a transação escreveu primeiro, o lease do reset espera o commit.
+    """
+    doc = db.demo_control.find_one_and_update(
+        {"_id": CONTROL_ID}, {"$inc": {"review_writes": 1}}, session=session,
+    )
+    until = _aware((doc or {}).get("reset_until"))
+    return until is not None and until > _now()
+
+
+def _acquire_reset_lease(db) -> str:
+    owner = uuid.uuid4().hex
+    deadline = time.monotonic() + RESET_WAIT_S
+    while True:
+        now = _now()
+        try:
+            got = db.demo_control.find_one_and_update(
+                {"_id": CONTROL_ID, "$or": [{"reset_until": None}, {"reset_until": {"$lte": now}}]},
+                {"$set": {"reset_until": now + timedelta(seconds=RESET_LEASE_S), "reset_owner": owner}},
+                upsert=True,
+            )
+        except DuplicateKeyError:
+            got = None  # documento existe e o lease está com outro reset
+        if got is not None or db.demo_control.find_one({"_id": CONTROL_ID, "reset_owner": owner}):
+            return owner
+        if time.monotonic() > deadline:
+            raise ResetBusy(RESET_BUSY)
+        time.sleep(0.2)
+
+
+def _release_reset_lease(db, owner: str) -> None:
+    db.demo_control.update_one({"_id": CONTROL_ID, "reset_owner": owner},
+                               {"$set": {"reset_until": None}, "$unset": {"reset_owner": ""}})
 
 
 def open_review(investigation_token: str, reason: str, analyst: str = "demo") -> dict[str, Any]:
@@ -57,6 +136,8 @@ def open_review(investigation_token: str, reason: str, analyst: str = "demo") ->
     started = time.perf_counter()
 
     def txn(session):
+        if _guard_review_write(db, session):
+            return {"ok": False, "reset_in_progress": True, "error": RESET_BUSY}
         existing = db.credit_decisions.find_one({"_id": case_id}, session=session)
         if existing:
             if existing["status"] != "open":
@@ -100,6 +181,7 @@ def open_review(investigation_token: str, reason: str, analyst: str = "demo") ->
         return {"ok": True, "companies": len(company_ids), "companies_blocked": empresas.modified_count,
                 "exposures_flagged": exposicoes.modified_count, "group_exposure": group["group_exposure"]}
 
+    _ensure_control(db)
     with client.start_session() as session:
         result = session.with_transaction(txn, read_concern=ReadConcern("snapshot"),
                                          write_concern=WriteConcern("majority"),
@@ -113,9 +195,12 @@ def close_review(case_id: str) -> dict[str, Any]:
     """Libera o grupo. O documento da decisão permanece: auditoria não some."""
     db = get_db()
     client = get_client()
+    _ensure_control(db)
     with client.start_session() as session:
 
         def txn(s_):
+            if _guard_review_write(db, s_):
+                return {"ok": False, "reset_in_progress": True, "error": RESET_BUSY}
             case = db.credit_decisions.find_one({"_id": case_id}, session=s_)
             if not case:
                 return {"ok": False, "error": "caso não encontrado"}
@@ -171,21 +256,35 @@ def case_detail(case_id: str) -> dict[str, Any]:
 
 
 def reset_all() -> dict[str, Any]:
-    """Volta a base ao estado pré-demo. Idempotente."""
+    """Volta a base ao estado pré-demo. Idempotente e serializado com abertura/fechamento."""
     db = get_db()
-    c = db.companies.update_many(
-        {"credit_status": FLAG},
-        {"$set": {"credit_status": "active"}, "$unset": {"case_id": "", "reviewed_at": ""}},
-    )
-    e = db.credit_exposure.update_many(
-        {"review_flag": True}, {"$unset": {"review_flag": "", "case_id": ""}}
-    )
-    db.credit_decisions.delete_many({})
-    db.ownership_alerts.delete_many({})
-    simuladas = db.ownership.delete_many({"simulated": True})
+    owner = _acquire_reset_lease(db)
+    try:
+        c = db.companies.update_many(
+            {"credit_status": FLAG},
+            {"$set": {"credit_status": "active"}, "$unset": {"case_id": "", "reviewed_at": ""}},
+        )
+        e = db.credit_exposure.update_many(
+            {"review_flag": True}, {"$unset": {"review_flag": "", "case_id": ""}}
+        )
+        db.credit_decisions.delete_many({})
+        db.ownership_alerts.delete_many({})
+        simuladas = db.ownership.delete_many({"simulated": True})
+        # Varredura final: nada sob revisão pode sobrar sem caso. Com o lease isto
+        # deve dar zero; fica como rede de proteção (lease expirado, escrita externa).
+        c2 = db.companies.update_many(
+            {"credit_status": FLAG},
+            {"$set": {"credit_status": "active"}, "$unset": {"case_id": "", "reviewed_at": ""}},
+        )
+        e2 = db.credit_exposure.update_many(
+            {"review_flag": True}, {"$unset": {"review_flag": "", "case_id": ""}}
+        )
+    finally:
+        _release_reset_lease(db, owner)
     return {
         "ok": True,
-        "companies_restored": c.modified_count,
-        "exposures_restored": e.modified_count,
+        "companies_restored": c.modified_count + c2.modified_count,
+        "exposures_restored": e.modified_count + e2.modified_count,
         "simulated_edges_removed": simuladas.deleted_count,
+        "orphans_swept": c2.modified_count + e2.modified_count,
     }

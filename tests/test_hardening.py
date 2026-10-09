@@ -9,7 +9,8 @@ from unittest.mock import MagicMock, patch
 os.environ.setdefault("MONGODB_URI", "mongodb://localhost:27017")
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "backend"))
 from fastapi.testclient import TestClient
-from pymongo.errors import ConnectionFailure, ExecutionTimeout
+from datetime import datetime, timedelta, timezone
+from pymongo.errors import ConnectionFailure, DuplicateKeyError, ExecutionTimeout
 from app.services import investigation
 from app.services.alerts import AlertHub
 from app.db import credit_decision, ownership, concentration, search, hierarchy
@@ -61,6 +62,7 @@ class TransactionTests(unittest.TestCase):
         self.db.companies.update_many.return_value.matched_count = 1
         self.db.companies.update_many.return_value.modified_count = 1
         self.db.credit_exposure.update_many.return_value.modified_count = 1
+        self.db.demo_control.find_one_and_update.return_value = {"_id": "review_lock", "reset_until": None}
         for target, value in [("get_db", self.db), ("get_client", self.client)]:
             p = patch.object(credit_decision, target, return_value=value); p.start(); self.addCleanup(p.stop)
         self.g = group()
@@ -106,6 +108,79 @@ class TransactionTests(unittest.TestCase):
     def test_failed_transaction_propagates(self):
         self.session.with_transaction.side_effect = ConnectionFailure("injected")
         with self.assertRaises(ConnectionFailure): credit_decision.open_review(self.token, "teste")
+
+
+class ResetLeaseTests(unittest.TestCase):
+    """GR-01: reset da demo serializado com abertura/fechamento de revisão."""
+
+    def setUp(self):
+        self.db = MagicMock()
+        self.client = MagicMock()
+        self.session = self.client.start_session.return_value.__enter__.return_value
+        self.session.with_transaction.side_effect = lambda fn, **kw: fn(self.session)
+        self.db.credit_decisions.find_one.return_value = {"status": "open"}
+        for target, value in [("get_db", self.db), ("get_client", self.client)]:
+            p = patch.object(credit_decision, target, return_value=value); p.start(); self.addCleanup(p.stop)
+        self.token = investigation.issue(group())["token"]
+
+    def lease(self, seconds):
+        until = None if seconds is None else datetime.now(timezone.utc) + timedelta(seconds=seconds)
+        self.db.demo_control.find_one_and_update.return_value = {"_id": "review_lock", "reset_until": until}
+
+    def test_open_refused_while_reset_holds_lease(self):
+        self.lease(60)
+        out = credit_decision.open_review(self.token, "teste")
+        self.assertFalse(out["ok"]); self.assertTrue(out["reset_in_progress"]); self.assertIn("case_id", out)
+        self.db.companies.update_many.assert_not_called()
+        self.db.credit_decisions.insert_one.assert_not_called()
+
+    def test_guard_writes_control_doc_inside_transaction(self):
+        self.lease(60)
+        credit_decision.open_review(self.token, "teste")
+        kw = self.db.demo_control.find_one_and_update.call_args.kwargs
+        self.assertIs(kw["session"], self.session)  # escrita no txn: conflito com o lease do reset
+
+    def test_close_refused_while_reset_holds_lease(self):
+        self.lease(60)
+        out = credit_decision.close_review("credit_x")
+        self.assertTrue(out["reset_in_progress"])
+        self.db.companies.update_many.assert_not_called()
+
+    def test_expired_lease_does_not_block(self):
+        self.lease(-1)
+        out = credit_decision.close_review("credit_x")
+        self.assertTrue(out["ok"])
+
+    def test_naive_datetime_from_driver_is_compared_as_utc(self):
+        until = datetime.now(timezone.utc).replace(tzinfo=None) + timedelta(seconds=60)
+        self.db.demo_control.find_one_and_update.return_value = {"reset_until": until}
+        self.assertTrue(credit_decision.close_review("credit_x")["reset_in_progress"])
+
+    def test_reset_acquires_sweeps_and_releases(self):
+        self.db.demo_control.find_one.return_value = {"_id": "review_lock"}
+        out = credit_decision.reset_all()
+        self.assertTrue(out["ok"]); self.assertIn("orphans_swept", out)
+        self.assertEqual(self.db.companies.update_many.call_count, 2)  # limpeza + varredura final
+        release = self.db.demo_control.update_one.call_args
+        self.assertEqual(release.args[1]["$set"], {"reset_until": None})
+
+    def test_reset_releases_lease_on_failure(self):
+        self.db.demo_control.find_one.return_value = {"_id": "review_lock"}
+        self.db.credit_decisions.delete_many.side_effect = ConnectionFailure("injected")
+        with self.assertRaises(ConnectionFailure): credit_decision.reset_all()
+        self.assertEqual(self.db.demo_control.update_one.call_args.args[1]["$set"], {"reset_until": None})
+
+    def test_reset_busy_when_other_lease_never_frees(self):
+        self.db.demo_control.find_one_and_update.side_effect = DuplicateKeyError("held")
+        self.db.demo_control.find_one.return_value = None
+        with patch.object(credit_decision, "RESET_WAIT_S", 0.05), self.assertRaises(credit_decision.ResetBusy):
+            credit_decision.reset_all()
+        self.db.companies.update_many.assert_not_called()
+
+    def test_reset_endpoint_busy_is_409(self):
+        with patch.object(credit_decision, "reset_all", side_effect=credit_decision.ResetBusy("busy")):
+            r = TestClient(app, raise_server_exceptions=False).post("/api/demo/reset")
+        self.assertEqual(r.status_code, 409); self.assertTrue(r.json()["detail"]["reset_in_progress"])
 
 
 class EndpointTests(unittest.TestCase):
