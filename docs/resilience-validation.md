@@ -29,6 +29,8 @@ O repositório [Mongo-LangGraph-Demo](https://github.com/jeegarghodasara/Mongo-L
 
 A base `graph_resilience_test_<uuid>` foi criada exclusivamente para o teste e removida no bloco de limpeza. O dataset da demonstração não foi reiniciado nem alterado por esses testes. Foram exercitados seis pedidos concorrentes com o mesmo comprovante, mudança de exposição antes da revisão, caso sobreposto, fechamento repetido, ciclo societário e limite de nós.
 
+Reset concorrente (2026-10-09): `tests/live_reset_race.py` cria e remove `graph_resetrace_test_<uuid>` e reproduz o agendamento que deixava 43 empresas sob revisão sem caso — reset pausado entre a limpeza de `companies` e o `delete_many` de `credit_decisions`, abertura completa nesse intervalo. Com o lease `demo_control/review_lock`, a abertura é recusada (`reset_in_progress`) e nada fica órfão; a ordem inversa (transação em voo quando o reset começa), lease expirado, 409 da API e 12 rodadas aleatórias também passam: 17/17 checagens, 124 s.
+
 Execução local:
 
 ```bash
@@ -38,6 +40,7 @@ node --test frontend/tests/*.test.mjs
 npm --prefix frontend run build
 backend/venv/bin/python tests/test_resilience.py --quick
 backend/venv/bin/python tests/live_hardening.py
+backend/venv/bin/python tests/live_reset_race.py   # reset concorrente com abertura/fechamento
 backend/venv/bin/python tests/stress.py --max 64 --seconds 8 --out tests/stress-hardening-results.json
 # Playwright e seu Chromium devem estar disponíveis:
 node tests/browser-offline.cjs

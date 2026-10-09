@@ -4,13 +4,13 @@
 ## Para que serve numa decisão de crédito
 
 Um grupo econômico com oito CNAEs diferentes **parece** diversificado, e
-diversificação é o que dilui risco. Mas "construção de edifícios", "obras de
-alvenaria" e "serviços de engenharia de obras" são o mesmo negócio com códigos
-distintos: se o setor de construção desacelerar, o grupo inteiro sente junto.
+diversificação é o que dilui risco. Mas "construção de edifícios residenciais",
+"obras de alvenaria e acabamento" e "serviços de engenharia e projeto de obras"
+são o mesmo negócio com códigos distintos: se o setor de construção desacelerar, o grupo inteiro sente junto.
 
-Isso é risco de concentração, e nenhuma comparação por código ou por palavra
-encontra — as três frases não dividem termo nenhum além de preposição. A busca
-por significado encontra.
+Isso é risco de concentração, e nenhuma comparação por código encontra; por
+palavra também falha — a primeira frase não divide termo nenhum com as outras
+duas (estas dividem só "obras"). A busca por significado encontra.
 
 ## Onde o vetor mora, e por que não é na empresa
 

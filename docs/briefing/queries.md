@@ -319,10 +319,11 @@ db.activities.aggregate([
    Não estima todos os negócios nem o maior bloco global.
 
 **Por que existe:** comparar código CNAE não encontra que "construção de
-edifícios", "obras de alvenaria e acabamento" e "serviços de engenharia de
-obras" são três códigos e um negócio só. Comparar palavras também não — as
-três frases não dividem termo além de preposição. Comparar **significado**
-encontra.
+edifícios residenciais", "obras de alvenaria e acabamento" e "serviços de
+engenharia e projeto de obras" (as descrições reais de `generate_ownership.py`)
+são três códigos e um negócio só. Comparar palavras também falha: a primeira
+não divide termo nenhum, além de preposição, com as outras duas (a segunda e a
+terceira dividem só "obras"). Comparar **significado** encontra.
 
 **Por que o índice vive em `activities` e não em `companies` (motivação de
 performance):** `activities` tem ~32 documentos, um por descrição distinta.
@@ -385,6 +386,19 @@ porta que ficou aberta. `readConcern: snapshot` garante que a decisão é
 tomada sobre uma fotografia consistente do grupo; `writeConcern: majority`
 garante que só é considerada tomada quando a maioria do replica set
 confirmou.
+
+**Por que a primeira escrita é no documento de controle:** `txn` começa com
+`find_one_and_update` em `demo_control/review_lock` (`$inc`), e só segue se
+`reset_until` não estiver no futuro. `reset_all()` (o `POST /api/demo/reset`)
+não é transacional: toma esse lease antes de limpar e o solta no fim. Como a
+transação **escreve** no mesmo documento, as duas ordens são seguras — se o
+reset tomou o lease depois do snapshot, a escrita sofre conflito e
+`with_transaction` repete, agora vendo o lease; se a transação escreveu
+primeiro, a escrita do lease espera o commit e o reset limpa o caso junto.
+Sem isso, uma abertura comitada entre a limpeza de `companies` e o
+`delete_many` de `credit_decisions` deixava 43 empresas bloqueadas sem caso
+(reproduzido em 2026-10-08). O reset ainda termina varrendo marcas sem caso.
+`close_review()` usa a mesma guarda.
 
 **Por que recusa uma segunda revisão sobre o mesmo grupo:** abrir duas
 sobrescreveria `case_id` e deixaria a primeira como casca (`status: "open"`,

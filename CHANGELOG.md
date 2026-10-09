@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1 (2026-10-09)
+
+- Demo reset no longer races review writes: it holds a self-expiring lease (`demo_control/review_lock`); opening or closing a review writes to that document inside its transaction and gets 409 `reset_in_progress` while the lease is live. The reset ends by sweeping flags left without a case. Before, a review opened mid-reset left the group blocked with no case (43 companies on the small dataset). Regression: `tests/live_reset_race.py` and `ResetLeaseTests`.
+- Concentration panel: the semantic example uses the seed's real activity descriptions and no longer claims the three share no word (two share "obras").
+- Per-run test outputs (`live-graph-adversarial`, `http-adversarial`, `browser-large-graph`, `stress-results`) are no longer versioned.
+
 ## 1.1.0 (2026-10-06)
 
 - UI: layout MongoDB 2026 "Dark Stage v4" (tokens mais escuros, Special Gothic / Source Code Pro locais, motivos de escada e grade, movimento escalonado).

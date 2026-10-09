@@ -361,6 +361,7 @@ def open_review(payload: ReviewIn):
                 "error": result.get("error", "transaction aborted"),
                 "case_id": result.get("case_id"),
                 "already_open": result.get("already_open", False),
+                "reset_in_progress": result.get("reset_in_progress", False),
             },
         )
     return result
@@ -377,6 +378,8 @@ def case(case_id: str):
 @app.post("/api/credit/close/{case_id}")
 def close(case_id: str):
     result = credit_decision.close_review(case_id)
+    if result.get("reset_in_progress"):
+        raise HTTPException(409, detail={"error": result["error"], "reset_in_progress": True})
     if not result.get("ok"):
         raise HTTPException(404, result.get("error"))
     return result
@@ -385,7 +388,10 @@ def close(case_id: str):
 # --------------------------------------------------------------------------- demo
 @app.post("/api/demo/reset")
 def reset():
-    out = credit_decision.reset_all()
+    try:
+        out = credit_decision.reset_all()
+    except credit_decision.ResetBusy as exc:
+        raise HTTPException(409, detail={"error": str(exc), "reset_in_progress": True}) from exc
     credit_demo.invalidate_cache()
     return out
 

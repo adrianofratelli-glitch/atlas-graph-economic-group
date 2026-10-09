@@ -7,3 +7,9 @@ __pycache__/
 .DS_Store
 dist/
 queries/load-results.test.json
+
+# saídas regeneradas a cada execução das suítes (não citadas como evidência nos docs)
+tests/live-graph-adversarial-results.json
+tests/http-adversarial-results.json
+tests/browser-large-graph-results.json
+tests/stress-results.json
