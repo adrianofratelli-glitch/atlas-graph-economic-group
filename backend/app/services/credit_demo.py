@@ -59,9 +59,10 @@ def _compute_entry_points(limit: int) -> dict[str, Any]:
     # acusa concentração. Abrir a demo por ali é abrir pelo caso em que o
     # argumento não aparece.
     #
-    # Construção é o exemplo limpo: "construção de edifícios", "obras de
-    # alvenaria" e "serviços de engenharia" são três códigos e um negócio só, e
-    # nenhuma palavra em comum entre eles.
+    # Construção é o exemplo limpo: "construção de edifícios residenciais",
+    # "obras de alvenaria e acabamento" e "serviços de engenharia e projeto de
+    # obras" são três códigos e um negócio só; a primeira não divide palavra com
+    # as outras duas (estas dividem só "obras").
     candidatos = with_retry(
         lambda: list(db.economic_groups.find({"showcase": True})),
         "economic_groups",

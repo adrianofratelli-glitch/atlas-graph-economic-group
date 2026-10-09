@@ -319,10 +319,11 @@ db.activities.aggregate([
    Não estima todos os negócios nem o maior bloco global.
 
 **Por que existe:** comparar código CNAE não encontra que "construção de
-edifícios", "obras de alvenaria e acabamento" e "serviços de engenharia de
-obras" são três códigos e um negócio só. Comparar palavras também não — as
-três frases não dividem termo além de preposição. Comparar **significado**
-encontra.
+edifícios residenciais", "obras de alvenaria e acabamento" e "serviços de
+engenharia e projeto de obras" (as descrições reais de `generate_ownership.py`)
+são três códigos e um negócio só. Comparar palavras também falha: a primeira
+não divide termo nenhum, além de preposição, com as outras duas (a segunda e a
+terceira dividem só "obras"). Comparar **significado** encontra.
 
 **Por que o índice vive em `activities` e não em `companies` (motivação de
 performance):** `activities` tem ~32 documentos, um por descrição distinta.

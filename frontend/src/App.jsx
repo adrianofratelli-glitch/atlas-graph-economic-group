@@ -646,10 +646,11 @@ export default function App() {
                 />
                 <p className="muted small">
                   Vários CNAEs diferentes parecem diversificação, e diversificação é o que dilui
-                  risco de crédito. Mas &quot;construção de edifícios&quot;, &quot;obras de
-                  alvenaria&quot; e &quot;serviços de engenharia de obras&quot; são três códigos e um
-                  negócio só. Comparar código não pega isso. Comparar palavra também não — as frases
-                  não dividem termo nenhum. Comparar significado pega.
+                  risco de crédito. Mas &quot;construção de edifícios residenciais&quot;, &quot;obras
+                  de alvenaria e acabamento&quot; e &quot;serviços de engenharia e projeto de obras&quot;
+                  são três códigos e um negócio só. Comparar código não pega isso. Comparar palavra
+                  também falha: a primeira não divide termo nenhum com as outras duas. Comparar
+                  significado pega.
                 </p>
                 {conc.saturado && <Saturado d={conc.saturado} />}
                 {conc.degraded && <Degraded d={conc.degraded} feature="Vector Search" />}
