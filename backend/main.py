@@ -36,7 +36,7 @@ async def lifespan(_: FastAPI):
     hub.stop()
 
 
-app = FastAPI(title="Atlas Graph — Ownership & Credit Risk", version="2.0.0", lifespan=lifespan)
+app = FastAPI(title="Atlas Graph — Ownership & Credit Risk", version="1.1.1", lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[

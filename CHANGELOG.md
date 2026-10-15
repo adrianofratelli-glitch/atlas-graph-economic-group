@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Atualiza dependências compatíveis e pisos de segurança; alinha metadados de versão entre aplicação e frontend.
+
 ## 1.1.1 (2026-10-09)
 
 - Demo reset no longer races review writes: it holds a self-expiring lease (`demo_control/review_lock`); opening or closing a review writes to that document inside its transaction and gets 409 `reset_in_progress` while the lease is live. The reset ends by sweeping flags left without a case. Before, a review opened mid-reset left the group blocked with no case (43 companies on the small dataset). Regression: `tests/live_reset_race.py` and `ResetLeaseTests`.
