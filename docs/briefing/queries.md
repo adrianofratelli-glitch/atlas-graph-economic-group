@@ -1,3 +1,5 @@
+> Números de linha podem ficar defasados após mudanças: a fonte atualizada é [MAPA_DO_CODIGO.md](../MAPA_DO_CODIGO.md).
+
 > Atualização: a revisão usa comprovante assinado e revalidação transacional; a concentração usa ENN e reporta apenas o bloco da atividade principal. Trechos abaixo são explicativos; o código é a fonte das pipelines vigentes.
 
 # Queries, pipelines e índices

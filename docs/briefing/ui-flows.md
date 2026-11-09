@@ -1,5 +1,7 @@
 # Interface e fluxos
 
+> Números de linha podem ficar defasados após mudanças: a fonte atualizada é [MAPA_DO_CODIGO.md](../MAPA_DO_CODIGO.md).
+
 A interface é em **português do Brasil**: é apresentada a bancos brasileiros,
 e CNPJ, razão social, sócio e rating são as palavras que esses times usam. A
 documentação do repositório fica em inglês (exceto este conjunto de
@@ -17,7 +19,7 @@ na raiz do workspace).
 
 | Arquivo | Papel |
 |---|---|
-| `App.jsx` (1058 linhas) | componente raiz — estado de toda a tela, orquestra as chamadas à API, monta as abas do inspector |
+| `App.jsx` (1119 linhas) | componente raiz — estado de toda a tela, orquestra as chamadas à API, monta as abas do inspector |
 | `GraphCanvas.jsx` (730 linhas) | o canvas `vis-network`: layout, interação, hop sweep, drag/reacomodação |
 | `QueryDetails.jsx` (20 linhas) | painel `<details>` que mostra a pipeline/query executada |
 | `api.js` | wrapper de chamadas HTTP ao backend |
@@ -54,9 +56,8 @@ ordem do roteiro.
 
 `body { overflow: hidden }` e `.app { height: 100dvh }`: a página nunca rola.
 Só o trilho de controles e o corpo do inspector rolam internamente, quando
-precisam. As abas do inspector, confirmadas em `App.jsx` (linha 35 e
-461-755): `company` (Empresa), `search` (Busca), `semantic` (Concentração),
-`visibility` (Visibilidade), `alerts` (Alertas).
+precisam. As abas do inspector, confirmadas em `App.jsx` (constante `TABS`, linha 8): `evidence` (Resumo, a primeira), `company` (Empresa), `search` (Busca), `semantic` (Concentração),
+`visibility` (Visibilidade), `alerts` (Alertas). Existe também a rota `/evidence` (`main.jsx`, linha 10), que renderiza a `ValidationPage`.
 
 Uma versão anterior empilhava grafo, busca, vetorial e alertas numa coluna
 de 2.600 px — o apresentador rolava para achar cada evidência e perdia o
