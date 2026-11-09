@@ -1,6 +1,6 @@
 # Mapa do código — atlas-graph-economic-group
 
-> Também conhecida como: **Graph fraud ring (grupo econômico)** (pasta antiga `atlas-graph-economic-group`). Portas: frontend **5350** / backend **8350**. Em uma frase: dado um CNPJ, o MongoDB sobe e desce a cadeia societária com `$graphLookup` e devolve o grupo econômico inteiro com a exposição de crédito consolidada, e em volta disso mostra busca por nome (Atlas Search), concentração por significado (Vector Search), escopo por hierarquia comercial, transação ACID de revisão de crédito e alertas por change stream.
+> Também conhecida como: **Graph fraud ring (grupo econômico)** (pasta antiga `atlas-graph-fraud-ring`). Portas: frontend **5350** / backend **8350**. Em uma frase: dado um CNPJ, o MongoDB sobe e desce a cadeia societária com `$graphLookup` e devolve o grupo econômico inteiro com a exposição de crédito consolidada, e em volta disso mostra busca por nome (Atlas Search), concentração por significado (Vector Search), escopo por hierarquia comercial, transação ACID de revisão de crédito e alertas por change stream.
 
 Atalhos: [architecture](briefing/architecture.md) · [queries](briefing/queries.md) · [ui-flows](briefing/ui-flows.md). Este mapa só aponta arquivo e linha.
 
