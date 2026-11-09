@@ -1,5 +1,7 @@
 # Graph analytics on MongoDB Atlas — economic groups and visibility hierarchies
 
+Mapa do código: [docs/MAPA_DO_CODIGO.md](docs/MAPA_DO_CODIGO.md)
+
 A credit applicant has no overdue balance. Its economic group tells a different story: 43 companies, R$ 154.5 million in limits and R$ 10.7 million overdue elsewhere in the ownership chain.
 
 This POV connects those records inside MongoDB. One aggregation walks up to corporate controllers, identifies valid roots, walks down through their holdings and joins credit exposure. A second scenario derives an advisor or manager's commercial scope from a reporting hierarchy.
