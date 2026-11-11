@@ -25,7 +25,7 @@ de algo, digo isso explicitamente em vez de inventar.
 
 ## 1. Grupo econômico — `backend/app/db/ownership.py`
 
-### 1.1 `_graph_lookup()` (linhas 72–91) — estágio `$graphLookup` reutilizável
+### 1.1 `_graph_lookup()` (linhas 71–90) — estágio `$graphLookup` reutilizável
 
 **O que faz:** monta o estágio de travessia em uma das duas direções. A
 aresta `ownership` é **dirigida** (`owner_id` participa de `owned_id`), e
@@ -59,10 +59,10 @@ chama isso de "o detalhe que mais confunde" do projeto.
 `owner_type` cortaria o sócio pessoa física, que costuma ser exatamente a
 ponte entre dois grupos que o cadastro trata como não relacionados.
 
-### 1.2 `_pipeline_grupo()` / `economic_group()` (linhas 104–429) — a query principal da demo
+### 1.2 `_pipeline_grupo()` / `economic_group()` (linhas 121–495) — a query principal da demo
 
-**Onde:** `backend/app/db/ownership.py:271-429`, chamada por
-`GET /api/group/{cnpj}` em `backend/main.py:160`.
+**Onde:** `backend/app/db/ownership.py:308-495`, chamada por
+`GET /api/group/{cnpj}` em `backend/main.py:207`.
 
 **O que faz, em linguagem natural:** dado um CNPJ, monta a árvore societária
 completa e a exposição de crédito consolidada — tudo em **uma única ida ao
@@ -110,23 +110,23 @@ pela complexidade do `$graphLookup`.
 `MAX_RAIZES = 5` (linha 52): um grupo com mais de 5 controladores no topo é
 processamento em lote, não consulta interativa.
 
-`clamp_depth()` (linhas 55–60): profundidade default `3`, teto
+`clamp_depth()` (linhas 54–59): profundidade default `3`, teto
 `settings.depth_cap` (`GRAPH_MAX_DEPTH_CAP`, padrão 6) — decidido no
 backend, nunca aceito cru do cliente.
 
 **Tratamento de erro:** se `$graphLookup` atinge limites de memória/tamanho
 ou o prazo `GRAPH_MAX_TIME_MS` (servidor `ExecutionTimeout` ou cliente
 `NetworkTimeout` do CSOT), a função devolve `too_large: true` em
-vez de deixar a exceção subir (`_falha()`, linhas 63–69).
+vez de deixar a exceção subir (`_falha()`, linhas 62–68).
 
 ---
 
 ## 2. Escopo de visibilidade — `backend/app/db/hierarchy.py`
 
-### 2.1 `_subordinados_pipeline()` / `team()` / `portfolio()` (linhas 37–186)
+### 2.1 `_subordinados_pipeline()` / `team()` / `portfolio()` (linhas 37–184)
 
 **Onde:** `backend/app/db/hierarchy.py:81-186`, chamada por
-`GET /api/hierarchy/{advisor_id}/portfolio` em `backend/main.py:183`.
+`GET /api/hierarchy/{advisor_id}/portfolio` em `backend/main.py:231`.
 
 **O que faz:** dado um `advisor_id`, desce a árvore de `advisors.reports_to`
 (auto-referente) via `$graphLookup`, une o escopo alcançado, soma a exposição
@@ -176,10 +176,10 @@ base tem crédito, e é a exposição que carrega o número; `advisor_id` foi
 denormalizado para `credit_exposure` (pelo gerador, não por um listener — ver
 `architecture.md`), e a carteira virou `$match` indexado + `$group`: 462 ms.
 
-### 2.2 `can_see()` (linhas 189–255)
+### 2.2 `can_see()` (linhas 187–253)
 
-**Onde:** `backend/app/db/hierarchy.py:189-255`, chamada por
-`GET /api/hierarchy/{advisor_id}/can-see/{cnpj}` em `backend/main.py:204`.
+**Onde:** `backend/app/db/hierarchy.py:187-253`, chamada por
+`GET /api/hierarchy/{advisor_id}/can-see/{cnpj}` em `backend/main.py:252`.
 
 **O que faz:** parte da empresa, salta para o assessor dono da conta via
 `$lookup`, e sobe a cadeia de comando dele com `$graphLookup` (`startWith:
@@ -216,10 +216,10 @@ somado — hoje é uma única agregação.
 
 ## 3. Busca por nome (Atlas Search) — `backend/app/db/search.py`
 
-### 3.1 `resolve_company()` (linhas 129–254)
+### 3.1 `resolve_company()` (linhas 142–277)
 
-**Onde:** `backend/app/db/search.py:129`, chamada por
-`POST /api/search/companies` em `backend/main.py:269`.
+**Onde:** `backend/app/db/search.py:142`, chamada por
+`POST /api/search/companies` em `backend/main.py:317`.
 
 **O que faz:** busca difusa em `razao_social` (e, em paralelo, no nome de
 sócios pessoa física via `_busca_socios()`), escopada por padrão ao grupo em
@@ -259,7 +259,7 @@ restringe ao grupo em tela (usa `_id` mapeado como `token`). `scope_only=false`
 é o gesto deliberado de entity resolution: acha uma empresa que ainda não
 está no grafo, com resultado marcado `in_group: false`.
 
-### 3.2 `_busca_socios()` (linhas 65–126)
+### 3.2 `_busca_socios()` (linhas 65–139)
 
 **O que faz:** a mesma busca fuzzy/autocomplete, mas sobre `people.name`.
 
@@ -273,8 +273,8 @@ sozinha (devolve lista vazia) sem derrubar a busca de empresas.
 
 ## 4. Concentração semântica (Atlas Vector Search) — `backend/app/db/concentration.py`
 
-**Onde:** `backend/app/db/concentration.py:57-187`, chamada por
-`POST /api/analysis/concentration` em `backend/main.py:286`.
+**Onde:** `backend/app/db/concentration.py:24-156`, chamada por
+`POST /api/analysis/concentration` em `backend/main.py:334`.
 
 **O que faz, em linguagem natural:** dado o grupo em tela, pergunta "este
 grupo é tão diversificado quanto os códigos CNAE sugerem, ou os CNAEs
@@ -348,18 +348,18 @@ O campo `setor` está mapeado como `filter` no índice vetorial (ver seção de
 passe `filter` por `setor` ou por `company_ids` — o filtro por escopo de
 grupo, hoje, acontece filtrando os `company_ids` **antes** da etapa 1
 (agregação normal), não dentro do `$vectorSearch`. Se for citar "filtro
-seletivo em `$vectorSearch`" na conversa técnica, a evidência real no código
-é o comentário de trap acima (`app/db/concentration.py:188-202` do
-`02-mongodb.md` original), não uma chamada ativa — vale confirmar se essa
-otimização está noutro branch antes de apresentar como comportamento atual.
+seletivo em `$vectorSearch`" na conversa técnica, saiba que o comentário de trap
+que o descrevia não existe mais no código atual: hoje o `$vectorSearch` roda
+exato sobre `activities`, sem `filter` (`backend/app/db/concentration.py:107-114`).
+Trate o filtro seletivo como histórico, não como comportamento atual.
 
 ---
 
 ## 5. Transação ACID — `backend/app/db/credit_decision.py`
 
-**Onde:** `open_review()` (linhas 48–152) e `close_review()` (linhas
-155–182), chamadas por `POST /api/credit/review` e
-`POST /api/credit/close/{case_id}` em `backend/main.py:302` e `:331`.
+**Onde:** `open_review()` (linhas 127–191) e `close_review()` (linhas
+194–229), chamadas por `POST /api/credit/review` e
+`POST /api/credit/close/{case_id}` em `backend/main.py:350` e `:378`.
 
 **O que faz:** não é leitura, é escrita transacional — vale documentar
 porque é a peça mais citada em conversa de arquitetura. Dentro de uma
@@ -411,8 +411,8 @@ consegue reconstruir o que foi decidido.
 
 ## 6. Change Stream — `backend/app/services/alerts.py`
 
-**Onde:** `AlertHub._run()` (linhas 116–162), thread própria, ligada no
-`lifespan` de `backend/main.py:32`.
+**Onde:** `AlertHub._run()` (linhas 129–176), thread própria, ligada no
+`lifespan` de `backend/main.py:33`.
 
 **O que faz:** observa `companies` com um pipeline de `$match` **rodando no
 servidor**, filtrando por campo alterado:
@@ -453,7 +453,7 @@ si nunca é materializada de novo por esse mecanismo.
 
 ## 7. Agregações auxiliares — `backend/app/services/credit_demo.py`
 
-**Onde:** `_compute_entry_points()`, linhas 46–154, chamada por
+**Onde:** `_compute_entry_points()`, linhas 46–155, chamada por
 `GET /api/entry-points`.
 
 **O que faz:** monta a lista de pontos de entrada da demo (um grupo de

@@ -349,6 +349,6 @@ Versão completa, com checklist pré-demo, em
 
 Chamada HTTP completa limitada a 120 s; o timer é liberado e a falha é
 sinalizada sem reenviar a operação. Está integrada em `main` — o estado
-vigente de validação está em `../../REVIEW.md`, e mudanças de resiliência de
+vigente de validação está em `docs/resilience-validation.md`, e mudanças de resiliência de
 frontend têm regressão em `cd frontend && node --test tests/*.test.mjs`
 (`frontend/tests/http-deadline.test.mjs`).
