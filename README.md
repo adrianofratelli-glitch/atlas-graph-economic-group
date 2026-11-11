@@ -119,6 +119,22 @@ becomes a property of every pair of companies in the base.
 DEV=1 ./start.sh     # with hot reload, for development
 ```
 
+## Docker
+
+One container: nginx serves the built UI on port 8080 and proxies `/api` and `/health` (including the
+`/api/alerts/stream` SSE feed) to the FastAPI backend, which runs with a single worker on `127.0.0.1:8000`.
+
+```bash
+docker build -t atlas-graph-economic-group .
+docker run --env-file .env.docker -p 8080:8080 atlas-graph-economic-group
+curl -fsS http://127.0.0.1:8080/health      # connection, counts, search index status
+```
+
+`docker run --env-file` does not strip quotes: write `KEY=value` with no quotes in the file you
+pass (a quoted `MONGODB_URI` reaches the driver with the quotes and fails). No `.env` and no secret go into
+the image; everything is read from the environment at runtime.
+Loading or resetting data stays outside the image (`scripts/reset_demo.py`).
+
 ## Measurements and resilience
 
 Current validation and load results are described in [the validation report](docs/resilience-validation.md). The older latency and ingestion measurements remain in [queries/benchmarks.md](queries/benchmarks.md), labelled with their original environment and date. They do not describe the latency of the current network path or prove a before/after gain for this release.
