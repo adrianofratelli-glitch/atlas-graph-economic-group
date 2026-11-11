@@ -1,4 +1,4 @@
-fastapi>=0.118
+fastapi>=0.162.2
 uvicorn[standard]>=0.34
 pymongo>=4.18.3,<5
 python-dotenv>=1.2.2
