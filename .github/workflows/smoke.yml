@@ -82,12 +82,12 @@ jobs:
         run: |
           for _ in $(seq 1 60); do
             if curl -fsS -o /dev/null "http://127.0.0.1:8080/health"; then
-            curl -fsS http://127.0.0.1:8080/health | python3 -c 'import json,sys; j=json.load(sys.stdin); sys.exit(0 if (j.get("status") == "ok") else 1)' || { echo "::error::health /health respondeu, mas o corpo diz que nao esta ok"; exit 1; }
-              echo "health ok"; exit 0
+            if curl -fsS http://127.0.0.1:8080/health | python3 -c 'import json,sys; j=json.load(sys.stdin); sys.exit(0 if (j.get("status") == "ok") else 1)'; then echo "health ok"; exit 0; fi
+
             fi
             sleep 3
           done
-          echo "::error::health /health não respondeu em 3 min"
+          echo "::error::health /health não ficou ok em 3 min"
           docker inspect --format '{{.State.Status}} {{.State.ExitCode}}' pov
           exit 1
       - name: tela
