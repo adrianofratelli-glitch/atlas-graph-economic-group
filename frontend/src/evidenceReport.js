@@ -15,3 +15,18 @@ export function validEvidenceReport(d) {
       ['depth','branching','fixture_edges','returned_edges','p50_ms','p95_ms'].every(k => finite(r[k])) &&
       typeof r.correct === 'boolean' && typeof r.complete === 'boolean'))
 }
+
+// Comparação local MongoDB × PostgreSQL (queries/compare_postgres.py). Opcional:
+// sem arquivo válido, a seção mostra o protocolo como pendente.
+const latency = l => l && ['p50_ms','p95_ms'].every(k => finite(l[k])) && finite(l.n)
+export function validComparisonReport(d) {
+  return Boolean(d && d.schema_version === 1 && d.status === 'measured_locally' &&
+    Number.isFinite(Date.parse(d.measured_at)) && typeof d.environment === 'string' &&
+    typeof d.engines?.mongodb === 'string' && typeof d.engines?.postgresql === 'string' &&
+    Array.isArray(d.method?.concurrency) && d.method.concurrency.length && d.method.concurrency.every(finite) &&
+    Array.isArray(d.not_measured) && typeof d.passed === 'boolean' &&
+    Array.isArray(d.cells) && d.cells.length && d.cells.every(c => c && typeof c.cell === 'string' &&
+      typeof c.same_result === 'boolean' && finite(c.fixture_companies) && finite(c.returned_companies) &&
+      Array.isArray(c.reasons) &&
+      (!c.same_result || d.method.concurrency.every(n => latency(c.latency?.[String(n)]?.mongodb) && latency(c.latency?.[String(n)]?.postgresql)))))
+}

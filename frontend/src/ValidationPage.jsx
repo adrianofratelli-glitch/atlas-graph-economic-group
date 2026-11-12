@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './validation.css'
-import { validEvidenceReport } from './evidenceReport'
+import { validEvidenceReport, validComparisonReport } from './evidenceReport'
 
 const number = n => new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 2 }).format(n)
 const money = cents => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(cents / 100)
@@ -28,11 +28,49 @@ function Curve({ rows }) {
   </figure>
 }
 
+const CELL_LABEL = {
+  hub_1200: 'Hub com 1.200 filhas', ciclo: 'Ciclo societário', participacao_cruzada: 'Participação cruzada com sócio PF',
+  profundidade_insuficiente: 'Cadeia além da profundidade', raizes_acima_do_teto: 'Raízes acima do teto',
+  controlador_inexistente: 'Controlador fora do cadastro',
+}
+const cellLabel = c => CELL_LABEL[c] ?? c.replace(/^arvore_(\d+)n_(\d+)f$/, (_, n, f) => `Árvore · ${n} ${n === '1' ? 'nível' : 'níveis'} · ${f} ${f === '1' ? 'filho' : 'filhos'}`)
+
+function Pending() {
+  return <><h2>PostgreSQL: medição pendente</h2><p>A comparação com uma consulta recursiva foi adiada até haver um ambiente equivalente. Não há vencedor declarado.</p><ul><li>Mesmo conjunto de empresas, participações, créditos e resultados esperados.</li><li>Mesmos recursos, proximidade de rede, concorrência e política de aquecimento.</li><li>Separar execução no servidor, transferência, carga inicial e custo operacional.</li></ul></>
+}
+
+function Comparison({ d }) {
+  const levels = d.method.concurrency.map(String)
+  const timed = d.cells.filter(c => c.same_result)
+  const p95 = (c, n, e) => c.latency[n][e].p95_ms
+  const first = levels[0]
+  const mongoLower = timed.filter(c => p95(c, first, 'mongodb') < p95(c, first, 'postgresql')).length
+  return <>
+    <h2>PostgreSQL: {timed.length} de {d.cells.length} células com resultado idêntico</h2>
+    <p>{d.environment}. MongoDB {d.engines.mongodb} com a agregação da POV; PostgreSQL {d.engines.postgresql} com uma consulta <code>WITH RECURSIVE</code> que aplica as mesmas regras de raiz, alcance e exposição. Uma célula só recebe tempo depois que os dois devolvem as mesmas empresas, arestas, valores em centavos e motivos de alcance.</p>
+    <p>Com um cliente por vez, o p95 do MongoDB foi menor em {mongoLower} células e o do PostgreSQL em {timed.length - mongoLower}. Isso descreve esta máquina e estas formas de árvore; não é ranking de produtos.</p>
+    <div className="validation-table-wrap"><table><caption>Latência ponta a ponta em ms (p50 / p95), {d.method.runs_per_cell} amostras por motor e célula</caption>
+      <thead><tr><th>Forma</th><th>Empresas</th><th>Alcance</th><th>Mesmo resultado</th>{levels.map(n => <th key={'m'+n}>MongoDB · {n} {n === '1' ? 'cliente' : 'clientes'}</th>)}{levels.map(n => <th key={'p'+n}>PostgreSQL · {n} {n === '1' ? 'cliente' : 'clientes'}</th>)}</tr></thead>
+      <tbody>{d.cells.map(c => <tr key={c.cell}><th>{cellLabel(c.cell)}</th><td>{number(c.returned_companies)}</td><td>{c.reasons.length ? 'Parcial declarado' : 'Completo'}</td><td className={c.same_result ? 'validation-ok' : 'validation-fail'}>{c.same_result ? 'Sim' : 'Divergente'}</td>
+        {['mongodb','postgresql'].flatMap(e => levels.map(n => <td key={e+n}>{c.same_result ? `${number(c.latency[n][e].p50_ms)} / ${number(c.latency[n][e].p95_ms)}` : '—'}</td>))}</tr>)}</tbody>
+    </table></div>
+    <details><summary>O que esta rodada não mede</summary><ul>{d.not_measured.map(t => <li key={t}>{t}</li>)}</ul><p>Tempos incluem o cliente Python, sem rede. Amostras individuais, tempo no servidor, carga e tamanho em disco estão no download.</p></details>
+    <p className="validation-note">Fotografia de {new Date(d.measured_at).toLocaleString('pt-BR')}. <a href="/evidence/comparison.json" download="graph-comparison.json">Baixar dados da comparação</a></p>
+  </>
+}
+
 export default function ValidationPage() {
   const [data,setData] = useState(null)
   const [error,setError] = useState(false)
   const [selected,setSelected] = useState(0)
   const [attempt,setAttempt] = useState(0)
+  const [comparison,setComparison] = useState(null)
+  useEffect(() => {
+    let active = true
+    fetch('/evidence/comparison.json').then(r => r.ok ? r.json() : null)
+      .then(d => { if (active && validComparisonReport(d)) setComparison(d) }).catch(() => {})
+    return () => { active = false }
+  },[])
   useEffect(() => {
     let active = true
     const controller = new AbortController()
@@ -64,7 +102,7 @@ export default function ValidationPage() {
         <details><summary>Verificação e plano de execução</summary><p>Referência: manifesto economic_groups, arestas corporativas internas e exposições lidas diretamente. Valores comparados em centavos. A consulta de referência usa o limite de seis níveis.</p><p>SHA-256 das fontes: <code className="validation-hash">{audit.source_sha256}</code></p><p>Contadores reportados pelo servidor, preservados por estágio. Não somamos contadores de pais e filhos; ausência de uma métrica não significa zero.</p><pre>{JSON.stringify({checks:audit.checks, traversal_matches:audit.traversal_matches, executionStats:audit.explain}, null, 2)}</pre></details>
       </section>
       <section id="curve" className="validation-card"><p className="validation-eyebrow">02 / Curva de comportamento</p><h2>Profundidade sozinha não explica o custo</h2><p>Aumentamos níveis e filhos por empresa em uma base temporária no mesmo Atlas. Cada ponto tem {data.runs} execuções após aquecimento, sem concorrência. Ping p50: {number(data.ping.p50_ms)} ms.</p><Curve rows={data.curve}/><div className="validation-table-wrap"><table><caption>Resultados medidos · p95 pelo método nearest rank</caption><thead><tr><th>Níveis</th><th>Filhos</th><th>Vínculos na árvore</th><th>Subida / descida</th><th>Vínculos exibidos</th><th>p50 ms</th><th>p95 ms</th><th>Alcance</th></tr></thead><tbody>{data.curve.map(r=><tr key={`${r.depth}-${r.branching}`}><td>{r.depth}</td><td>{number(r.branching)}</td><td>{number(r.fixture_edges)}</td><td>{r.traversal_matches ? `${number(r.traversal_matches.up)} / ${number(r.traversal_matches.down)}` : "—"}</td><td>{number(r.returned_edges)}</td><td>{number(r.p50_ms)}</td><td>{number(r.p95_ms)}</td><td>{!r.correct?'Divergente':r.complete?'Completo':'Parcial · revisão bloqueada'}</td></tr>)}</tbody></table></div><p className="validation-note">Subida e descida contam correspondências de arestas em cada direção; a mesma aresta pode aparecer nas duas. O número de vínculos da árvore é conhecido pelo gerador; vínculos exibidos são o payload final, não um contador de documentos examinados. A base temporária não contém as {number(data.production_counts.companies)} empresas da demonstração. Planos por estágio e amostras individuais estão no download. Não subtraímos ping dos percentis.</p><p>O caso com 1.200 filhos expõe o teto de apresentação. Ele não determina o limite físico do MongoDB. Não houve busca pelo ponto de exaustão do cluster compartilhado.</p></section>
-      <section id="comparison" className="validation-card"><p className="validation-eyebrow">03 / Comparação entre alternativas</p><h2>PostgreSQL: medição pendente</h2><p>A comparação com uma consulta recursiva foi adiada até haver um ambiente equivalente. Não há vencedor declarado.</p><ul><li>Mesmo conjunto de empresas, participações, créditos e resultados esperados.</li><li>Mesmos recursos, proximidade de rede, concorrência e política de aquecimento.</li><li>Separar execução no servidor, transferência, carga inicial e custo operacional.</li></ul><a href={`${repo}/blob/main/docs/comparison-protocol.md`}>Ler o protocolo de comparação →</a></section>
+      <section id="comparison" className="validation-card"><p className="validation-eyebrow">03 / Comparação entre alternativas</p>{comparison ? <Comparison d={comparison}/> : <Pending/>}<a href={`${repo}/blob/main/docs/comparison-protocol.md`}>Ler o protocolo de comparação →</a></section>
       <footer className="validation-note">Dados sintéticos. A auditoria demonstra correção frente ao manifesto, não precisão de identificação em um cadastro real. <a href={`${repo}/blob/main/docs/resilience-validation.md`}>Testes de resiliência e limites</a></footer>
     </>}
   </div>

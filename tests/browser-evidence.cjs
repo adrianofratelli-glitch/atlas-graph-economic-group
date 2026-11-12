@@ -1,5 +1,7 @@
 const { chromium } = require('playwright')
 const assert = require('node:assert/strict')
+// UI_BASE aponta uma cópia de teste em porta livre (padrão: porta do Portal).
+const UI = process.env.UI_BASE || 'http://127.0.0.1:5350'
 const fs = require('node:fs/promises')
 const results=[]
 async function check(test,fn) { await fn();results.push({test,passed:true});console.log('PASS',test) }
@@ -8,7 +10,7 @@ async function check(test,fn) { await fn();results.push({test,passed:true});cons
  try {
   const page=await browser.newPage({viewport:{width:1440,height:1000}})
   const errors=[];page.on('pageerror',e=>errors.push(e.message))
-  await page.goto('http://127.0.0.1:5350/evidence')
+  await page.goto(UI + '/evidence')
   await page.getByRole('heading',{name:'Da empresa à soma do grupo'}).waitFor()
   await check('auditoria carrega e todos os grupos são navegáveis',async()=>{
    const select=page.getByLabel('Grupo de referência')
@@ -24,9 +26,21 @@ async function check(test,fn) { await fn();results.push({test,passed:true});cons
    await page.getByText('Verificação e plano de execução',{exact:true}).click()
    await page.getByText('Conferir as 43 empresas e seus valores',{exact:true}).click()
   })
-  await check('limite parcial e comparação pendente estão explícitos',async()=>{
+  await check('limite parcial e comparação medida estão explícitos',async()=>{
    await page.getByText('Parcial · revisão bloqueada',{exact:true}).waitFor()
-   await page.getByRole('heading',{name:'PostgreSQL: medição pendente'}).waitFor()
+   const cmp=await (await page.request.get(UI + '/evidence/comparison.json')).json()
+   const iguais=cmp.cells.filter(c=>c.same_result).length
+   await page.getByRole('heading',{name:`PostgreSQL: ${iguais} de ${cmp.cells.length} células com resultado idêntico`}).waitFor()
+   assert.equal(await page.locator('#comparison tbody tr').count(),cmp.cells.length)
+   assert.equal(await page.locator('#comparison').getByText('Divergente',{exact:true}).count(),cmp.cells.length-iguais)
+  })
+  await check('sem comparação publicada, a seção volta a declarar pendência',async()=>{
+   await page.route('**/evidence/comparison.json',r=>r.fulfill({status:404,body:''}))
+   await page.reload();await page.getByRole('heading',{name:'PostgreSQL: medição pendente'}).waitFor()
+   await page.route('**/evidence/comparison.json',r=>r.fulfill({contentType:'application/json',body:JSON.stringify({schema_version:1,status:'measured_locally',cells:[null]})}))
+   await page.reload();await page.getByRole('heading',{name:'PostgreSQL: medição pendente'}).waitFor()
+   await page.unroute('**/evidence/comparison.json');await page.reload()
+   await page.getByRole('heading',{name:'Da empresa à soma do grupo'}).waitFor()
   })
   for(const width of [1440,768,360]){
    await page.setViewportSize({width,height:1000})
@@ -37,8 +51,10 @@ async function check(test,fn) { await fn();results.push({test,passed:true});cons
   await page.setViewportSize({width:1440,height:1900})
   await page.locator('#curve').scrollIntoViewIfNeeded()
   await page.locator('#curve').screenshot({path:'docs/screenshots/09-curva-de-comportamento.png'})
+  await page.locator('#comparison').scrollIntoViewIfNeeded()
+  await page.locator('#comparison').screenshot({path:'docs/screenshots/10-comparacao-postgresql.png'})
   await check('JSON publicado está acessível',async()=>{
-   const r=await page.request.get('http://127.0.0.1:5350/evidence/results.json');assert.equal(r.status(),200)
+   const r=await page.request.get(UI + '/evidence/results.json');assert.equal(r.status(),200)
    assert.equal((await r.json()).passed,true)
   })
   await check('falha do relatório tem recuperação',async()=>{
