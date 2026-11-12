@@ -95,7 +95,9 @@ Os planos preservam métricas por estágio. O contador do cursor inicial não é
 
 Dados, amostras, hashes e planos: `frontend/public/evidence/results.json`. Reprodução: `backend/venv/bin/python queries/build_evidence.py --runs 10`. A base temporária da curva foi removida; a base da demonstração recebeu apenas leituras.
 
-A comparação com PostgreSQL foi adiada por decisão do responsável pela POV. O protocolo está em `docs/comparison-protocol.md`; não há resultado comparativo publicado.
+Comparação com PostgreSQL (2026-11-12, primeira rodada local): `queries/compare_postgres.py` carregou as mesmas fixtures e 100 mil empresas de fundo em MongoDB 8.2 e PostgreSQL 16 no mesmo computador. As 18 células devolveram resultado idêntico (empresas, arestas, centavos e motivos de alcance). Tempos, limites da rodada e o que segue pendente: `docs/adr/0004-first-postgresql-comparison-on-local-engines.md` e `frontend/public/evidence/comparison.json`. O job `compare` do CI repete a checagem de correção a cada push.
+
+Suítes desta data contra `graph_grupo_economico_test` (escala small) com API e UI em portas livres: `http_adversarial` 29/29, `live_graph_adversarial` 23/23, `live_hardening` 22/22, `live_reset_race` 17/17, `test_resilience --quick` 43/43, navegador `browser-evidence` 11/11, `browser-offline` 11/11, `browser-large-graph` 6/6, `browser-resilience` 15/15. A latência por grupo (~0,4 s) acompanha o ping de ~240 ms até o cluster.
 
 ## Publicação local e mapa do código
 

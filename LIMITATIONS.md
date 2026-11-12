@@ -328,6 +328,12 @@ decisions: the vectors are 512-dimensional, stored as BinData float32, with a
 quantised index (see `docs/adr/0002-vetores-em-512d-quantizados.md`). Sizing for
 production would start somewhere else.
 
+The PostgreSQL comparison (`docs/adr/0004-first-postgresql-comparison-on-local-engines.md`)
+ran both engines locally on one laptop, warm and without network. PostgreSQL was
+faster on small groups and MongoDB on the largest trees; neither result says how
+Atlas compares with a managed PostgreSQL in the same region, under cold cache or on
+the 1.2-million-company base. Do not quote it as a product ranking.
+
 Load throughput was measured **from a workstation against a remote cluster**, so
 client network latency is included and dominates. A production load runs in the
 cluster's own region. Present that number as a floor observed under bad conditions,

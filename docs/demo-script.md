@@ -161,4 +161,4 @@ Open **Evidências técnicas**. Select the six-level group and reconcile its 43 
 
 Move to the curve. Compare one, two and three children per company, then the 1,200-child boundary case. Distinguish edge matches, returned edges and execution-plan counters. State that these are temporary fixtures, not the full background dataset, and that the timings include the network.
 
-Close with the comparison status: PostgreSQL is pending. The protocol is ready, but there are no comparative performance results.
+Close with the comparison section. Both engines returned the same group in all 18 cells; PostgreSQL was faster on small groups, MongoDB on the largest trees, and both stayed far under the interactive threshold. Say what it was: two local engines on one laptop, warm, without network. Atlas against a managed PostgreSQL, cold cache and the 1.2-million-company base are still open, and the choice should rest on where the data already lives and what else the workload needs.

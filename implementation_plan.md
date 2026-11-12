@@ -115,4 +115,4 @@ and the interface on 5350. Database: `graph_grupo_economico`.
 and CNPJ, razão social, sócio and rating are the words those teams use. The
 repository documentation is in English; code comments are in Portuguese.
 
-Current validation is recorded in [docs/resilience-validation.md](docs/resilience-validation.md). The evidence page adds independent reconciliation against the generator manifests and a controlled depth/branching curve. Historical timings from August are retained as historical measurements, not as current application latency. A matched PostgreSQL comparison remains deferred.
+Current validation is recorded in [docs/resilience-validation.md](docs/resilience-validation.md). The evidence page adds independent reconciliation against the generator manifests and a controlled depth/branching curve. Historical timings from August are retained as historical measurements, not as current application latency. A first PostgreSQL comparison ran on local engines with identical results in all cells ([ADR 0004](docs/adr/0004-first-postgresql-comparison-on-local-engines.md)); the managed-service round remains open.

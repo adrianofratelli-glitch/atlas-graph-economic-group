@@ -20,6 +20,7 @@ de algo, digo isso explicitamente em vez de inventar.
 | `backend/app/db/credit_decision.py` | transação ACID multi-documento |
 | `backend/app/services/alerts.py` | Change Stream sobre `companies` |
 | `backend/app/services/credit_demo.py` | agregação de pontos de entrada da demo |
+| `queries/compare_postgres.py` | fora da aplicação: a mesma pergunta do item 1 em SQL recursivo, para a comparação |
 
 ---
 
@@ -496,6 +497,32 @@ a checagem — corrigido em auditoria de 2026-09 para evitar cálculo duplicado
 sob concorrência).
 
 ---
+
+## 8. Comparação com SQL recursivo — `queries/compare_postgres.py` (fora da aplicação)
+
+**Onde:** `PG_GROUP_SQL` (linha 273) e `pg_group()` (linha 333); o lado MongoDB é
+`mongo_raw()` (linha 362), que executa a mesma `_pipeline_grupo()` do item 1.
+
+**O que faz:** responde a pergunta do item 1 numa única consulta PostgreSQL, com as
+mesmas regras: subida com nível 0..d, raízes candidatas (consultada mais donos PJ
+menos controladas por PJ), no máximo `MAX_RAIZES`, descarte de raiz com dono PJ no
+banco, descida por raiz, motivos de alcance pela fronteira e hidratação com
+exposição.
+
+```sql
+WITH RECURSIVE
+up AS (
+  SELECT o.id AS eid, o.owner_id, 0 AS nivel FROM ownership o JOIN subj s ON o.owned_id = s.id
+  UNION
+  SELECT o.id, o.owner_id, u.nivel + 1 FROM up u JOIN ownership o ON o.owned_id = u.owner_id
+  WHERE u.nivel < %(d)s
+), ...
+```
+
+`UNION` sobre (aresta, nível) termina em ciclo e limita as linhas a
+arestas × (d + 1), como a visita em largura do `$graphLookup`. Índices nos dois
+sentidos (`owner_id`, `owned_id`), como `schema/indexes.js`. A aplicação não usa
+PostgreSQL; esta consulta existe só para a comparação (ADR 0004).
 
 ## Índices MongoDB
 

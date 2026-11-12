@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- First MongoDB × PostgreSQL comparison (`queries/compare_postgres.py`): both engines local on one machine, same fixtures and 100k background companies, correctness gate before timings; 18/18 cells identical. The evidence page renders it (section 03) and falls back to "pending" without a valid report. ADR 0004.
+- CI job `compare` repeats the correctness gate with `mongo:8.2` and `postgres:16` service containers, no secrets.
+- ADR 0005: why name resolution and concentration do not use `$rankFusion`/`$scoreFusion`.
+- `API_BASE`, `UI_BASE` and `GRAPH_API_TARGET` let the live and browser suites run against a copy on free ports.
 - Atualiza dependências compatíveis e pisos de segurança; alinha metadados de versão entre aplicação e frontend.
 
 ## 1.1.1 (2026-10-09)

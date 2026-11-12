@@ -227,7 +227,19 @@ PYTHONPATH=backend .venv/bin/python queries/bench.py --runs 30
 .venv/bin/python tests/stress.py                     # carga mista, rampa até 64 concorrentes
 .venv/bin/python tests/stress.py --max 128 --seconds 30
 cd frontend && node --test tests/*.test.mjs           # regressão de frontend
+python3.12 -m venv /tmp/cmp && /tmp/cmp/bin/pip install -r queries/requirements-compare.txt
+/tmp/cmp/bin/python queries/compare_postgres.py      # MongoDB × PostgreSQL locais; grava comparison.json
 ```
+
+Cópia de teste em portas livres, sem tocar 8350/5350: `http_adversarial.py` e
+`test_resilience.py` leem `API_BASE`; os `tests/browser-*.cjs` leem `UI_BASE`; o
+proxy do Vite lê `GRAPH_API_TARGET` (`frontend/vite.config.js`).
+
+`queries/compare_postgres.py` sobe `mongod` e um PostgreSQL embutido em diretórios
+temporários (ou usa `--mongo-uri`/`--pg-uri`, com banco PostgreSQL terminado em
+`_test`), carrega as mesmas fixtures nos dois e só cronometra uma célula depois que
+os dois devolvem o mesmo grupo. O job `compare` do `ci.yml` repete essa checagem
+com containers `mongo:8.2` e `postgres:16`. Decisão e resultado: `docs/adr/0004-first-postgresql-comparison-on-local-engines.md`.
 
 `tests/test_resilience.py` não é teste unitário: cada caso corresponde a uma
 forma real de este projeto falhar na frente de um cliente, e o critério de

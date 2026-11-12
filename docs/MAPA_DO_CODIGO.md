@@ -49,7 +49,7 @@ Regra do backend: `backend/main.py` só expõe HTTP; as consultas moram em `back
 │   └── run_all.sh              Atalho histórico
 ├── schema/                     `indexes.js` (índices comuns), `search_indexes.py` (Search e Vector), `collections.md`
 ├── scripts/reset_demo.py       RESET ÚNICO do dado: gera, indexa, verifica (`--drop` para carga limpa)
-├── queries/                    `bench.py`, `build_evidence.py` + JSON de resultados e `benchmarks.md`
+├── queries/                    `bench.py`, `build_evidence.py`, `compare_postgres.py` + JSON de resultados e `benchmarks.md`
 ├── tests/                      Testes e scripts de hostilidade/carga (ver seção 6)
 └── docs/                       briefing/, adr/ (0001 topologia, 0002 vetores 512d, 0003 arestas), roteiro, protocolos
 ```
@@ -137,7 +137,7 @@ Texto completo e explicação: [queries.md](briefing/queries.md). Não há `$reg
 - Solicitantes que aparecem no seletor -> `backend/app/services/credit_demo.py::_compute_entry_points` (`:46`) e a carga `economic_groups` em `data-generator/generate_ownership.py`.
 - Tamanho/forma do dado sintético -> `data-generator/profiles.py`, `generate_ownership.py` e `scripts/reset_demo.py`.
 - Mudar porta -> `start.sh`, `frontend/vite.config.js`, `BACKEND_PORT`/`FRONTEND_PORT`.
-- Página de evidência -> `frontend/public/evidence/results.json` (regerado por `queries/build_evidence.py`) e `frontend/src/ValidationPage.jsx`.
+- Página de evidência -> `frontend/public/evidence/results.json` (regerado por `queries/build_evidence.py`), `frontend/public/evidence/comparison.json` (regerado por `queries/compare_postgres.py`) e `frontend/src/ValidationPage.jsx`.
 
 ## 6. Testes
 

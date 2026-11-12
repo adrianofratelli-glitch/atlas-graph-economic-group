@@ -1,6 +1,15 @@
 # MongoDB e PostgreSQL: protocolo de comparação
 
-A execução foi adiada por não haver um ambiente PostgreSQL preparado. Não publicamos tempos estimados nem atribuímos vantagem a um motor sem medir os dois.
+**Estado em 2026-11-12:** primeira rodada executada com os dois motores locais, no mesmo computador e sem rede (MongoDB 8.2 e PostgreSQL 16, 1 GB de cache cada). As 18 células devolveram resultado idêntico. O PostgreSQL teve p95 menor em 14 células (grupos de até 31 empresas e todas as topologias hostis); o MongoDB, nas quatro maiores (121 a 1.201 empresas), com distância maior sob 8 clientes. Decisão, números e ressalvas: [ADR 0004](adr/0004-first-postgresql-comparison-on-local-engines.md). Dados brutos: `frontend/public/evidence/comparison.json`. Atlas, PostgreSQL gerenciado, carga fria, a base de 1,2 milhão de empresas e as concorrências 32/64 continuam pendentes, nas condições abaixo.
+
+```bash
+python3.12 -m venv /tmp/cmp && /tmp/cmp/bin/pip install -r queries/requirements-compare.txt
+/tmp/cmp/bin/python queries/compare_postgres.py --runs 100 --concurrency 1,8   # sobe mongod e PostgreSQL temporários
+```
+
+Sem `--mongo-uri`/`--pg-uri`, o script precisa de `mongod` no PATH e sobe um PostgreSQL embutido (`pgserver`, wheels até Python 3.12); ambos são encerrados no fim. Com URIs, o banco PostgreSQL precisa terminar em `_test`. O job `compare` do CI repete a checagem de correção com containers `mongo:8.2` e `postgres:16`; os tempos de lá não são publicados.
+
+Não publicamos tempos estimados nem atribuímos vantagem a um motor sem medir os dois.
 
 ## Pergunta comum
 

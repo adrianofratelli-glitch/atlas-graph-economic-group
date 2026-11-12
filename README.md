@@ -52,7 +52,16 @@ npm --prefix frontend run build
 
 The script reads the demo dataset and creates an isolated `graph_evidence_test_<uuid>` database for the curve, then removes it. Ten warm samples per point provide an exploratory curve, not a stable production tail-latency estimate.
 
-A PostgreSQL comparison is deferred until an equivalent environment is available. The [comparison protocol](docs/comparison-protocol.md) defines the shared contract and measurement conditions. There is no measured winner.
+The third section compares the same question against PostgreSQL `WITH RECURSIVE`, with both engines running locally on one machine and no network in between. A cell only gets timings once both engines return the same companies, edges, cents and reach reasons; all 18 did. PostgreSQL had the lower p95 on groups of up to 31 companies and on every hostile shape; MongoDB had it on the four largest trees (121 to 1,201 companies), by a wider margin with 8 concurrent clients. Both stayed far below the 3-second interactive threshold. Managed services, network, cold cache and the full 1.2-million-company base are not part of this round. See [ADR 0004](docs/adr/0004-first-postgresql-comparison-on-local-engines.md) and the [comparison protocol](docs/comparison-protocol.md).
+
+![Same result in both engines, timings per tree shape](docs/screenshots/10-comparacao-postgresql.png)
+
+```bash
+python3.12 -m venv /tmp/cmp && /tmp/cmp/bin/pip install -r queries/requirements-compare.txt
+/tmp/cmp/bin/python queries/compare_postgres.py --runs 100 --concurrency 1,8   # needs mongod on PATH
+```
+
+The name search stays lexical (exact, fuzzy and autocomplete in one `compound`), and the semantic panel stays an exact vector search over 32 activities. [ADR 0005](docs/adr/0005-no-rank-fusion-in-name-resolution.md) explains why neither uses `$rankFusion`.
 
 ## What it takes to run
 
@@ -158,6 +167,8 @@ backend/venv/bin/python tests/live_graph_adversarial.py    # own graph_adversari
 backend/venv/bin/python tests/live_reset_race.py           # own graph_resetrace_test_<uuid>
 backend/venv/bin/python tests/stress.py --max 64 --seconds 20
 ```
+
+The API-level scripts read `API_BASE` and the browser scripts `UI_BASE`, so a copy on free ports can be tested without touching the presenter's 8350/5350: run the backend with `MONGODB_DB=graph_grupo_economico_test` on another port and the UI with `GRAPH_API_TARGET=http://127.0.0.1:<api port> npx vite preview --port <ui port>`.
 
 `live_graph_adversarial.py` builds hostile topologies in a throwaway database —
 a hub with 5,000 children, a three-node cycle, a self-loop, a 20-level chain,

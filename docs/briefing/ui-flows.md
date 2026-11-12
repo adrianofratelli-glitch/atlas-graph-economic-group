@@ -58,6 +58,13 @@ ordem do roteiro.
 Só o trilho de controles e o corpo do inspector rolam internamente, quando
 precisam. As abas do inspector, confirmadas em `App.jsx` (constante `TABS`, linha 8): `evidence` (Resumo, a primeira), `company` (Empresa), `search` (Busca), `semantic` (Concentração),
 `visibility` (Visibilidade), `alerts` (Alertas). Existe também a rota `/evidence` (`main.jsx`, linha 10), que renderiza a `ValidationPage`.
+A `ValidationPage` tem três seções: 01 auditoria dos grupos de vitrine e 02 curva de
+profundidade (ambas de `/evidence/results.json`), e 03 comparação com PostgreSQL, lida
+de `/evidence/comparison.json` e validada por `validComparisonReport()`
+(`frontend/src/evidenceReport.js`). A 03 mostra quantas células deram resultado
+idêntico, p50/p95 por motor e concorrência, e a lista do que a rodada não mede;
+uma célula divergente aparece como "Divergente" e sem tempo. Sem arquivo válido, a
+seção volta ao texto "PostgreSQL: medição pendente".
 
 Uma versão anterior empilhava grafo, busca, vetorial e alertas numa coluna
 de 2.600 px — o apresentador rolava para achar cada evidência e perdia o
