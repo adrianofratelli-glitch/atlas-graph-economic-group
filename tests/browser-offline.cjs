@@ -1,6 +1,8 @@
 /* Deterministic browser faults. Every API request is intercepted; no Atlas access. */
 const {chromium} = require('playwright')
 const assert = require('node:assert/strict')
+// UI_BASE aponta uma cópia de teste em porta livre (padrão: porta do Portal).
+const UI = process.env.UI_BASE || 'http://127.0.0.1:5350'
 const fs = require('node:fs/promises')
 const results=[]
 async function check(name, fn) { await fn(); results.push({test:name,passed:true}); console.log('PASS',name) }
@@ -45,7 +47,7 @@ async function check(name, fn) { await fn(); results.push({test:name,passed:true
    if(path.includes('/can-see/'))return json(route,{allowed:true,razao_social:'Solicitante',reason:'no escopo',owner:{nome:'Perfil'}})
    throw new Error('Unmocked API: '+path)
   })
-  await page.goto('http://127.0.0.1:5350/')
+  await page.goto(UI + '/')
   await page.getByRole('button',{name:'Abrir revisão sobre 3 empresas'}).waitFor()
   await check('double click gera uma única escrita', async()=>{
    await page.getByRole('button',{name:'Abrir revisão sobre 3 empresas'}).evaluate(b=>{b.click();b.click()})

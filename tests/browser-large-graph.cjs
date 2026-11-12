@@ -2,6 +2,8 @@
  * Uso: NODE_PATH=<node_modules com playwright> node tests/browser-large-graph.cjs (com ./start.sh no ar). */
 const {chromium} = require('playwright')
 const assert = require('node:assert/strict')
+// UI_BASE aponta uma cópia de teste em porta livre (padrão: porta do Portal).
+const UI = process.env.UI_BASE || 'http://127.0.0.1:5350'
 const fs = require('node:fs/promises')
 const results = []
 async function check(name, fn) { await fn(); results.push({test: name, passed: true}); console.log('PASS', name) }
@@ -31,7 +33,7 @@ async function check(name, fn) { await fn(); results.push({test: name, passed: t
       return json(route, {detail: 'não usado'}, 404)
     })
     const t0 = Date.now()
-    await page.goto('http://127.0.0.1:5350/')
+    await page.goto(UI + '/')
     // Pronto = a rede do vis-network tem as 1.200 posições e as 1.199 arestas.
     await page.waitForFunction(n => window.__grafo && Object.keys(window.__grafo.posicoes()).length >= n
       && window.__grafo.arestas().length >= n - 1, N, {timeout: 60000})

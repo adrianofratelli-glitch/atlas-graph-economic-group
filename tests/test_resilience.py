@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 import subprocess
 from pathlib import Path
@@ -21,7 +22,7 @@ from concurrent import futures
 
 import httpx
 
-BASE = "http://127.0.0.1:8350"
+BASE = os.getenv("API_BASE", "http://127.0.0.1:8350")  # cópia de teste em porta livre
 c = httpx.Client(base_url=BASE, timeout=90.0)
 
 _ok = 0

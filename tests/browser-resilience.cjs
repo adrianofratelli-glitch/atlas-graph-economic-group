@@ -2,6 +2,8 @@
 const { chromium } = require('playwright')
 const fs = require('node:fs/promises')
 const assert = require('node:assert/strict')
+// UI_BASE aponta uma cópia de teste em porta livre (padrão: porta do Portal).
+const UI = process.env.UI_BASE || 'http://127.0.0.1:5350'
 const results = []
 async function check(label, fn) { await fn(); results.push({test: label, passed: true}); console.log('PASS', label) }
 ;(async () => {
@@ -9,7 +11,7 @@ async function check(label, fn) { await fn(); results.push({test: label, passed:
   try {
     const page = await browser.newPage({viewport:{width:1440,height:1000}})
     const errors=[]; page.on('pageerror', e => errors.push(e.message))
-    await page.goto('http://127.0.0.1:5350/')
+    await page.goto(UI + '/')
     await page.getByRole('heading', {name:'O que esta consulta revela'}).waitFor({timeout:60000})
     await check('resumo e consulta parcial bloqueiam revisão', async () => {
       assert(await page.getByRole('button', {name:/Abrir revisão sobre/}).isDisabled())
@@ -65,7 +67,7 @@ async function check(label, fn) { await fn(); results.push({test: label, passed:
     const offline = await browser.newPage()
     await offline.route('**/api/**', route => route.abort('connectionrefused'))
     await offline.route('**/health', route => route.abort('connectionrefused'))
-    await offline.goto('http://127.0.0.1:5350/')
+    await offline.goto(UI + '/')
     await check('offline exibe erro e recuperação', async () => {
       await offline.getByRole('button',{name:'Tentar novamente'}).waitFor({timeout:10000})
       assert(await offline.getByRole('alert').isVisible())
