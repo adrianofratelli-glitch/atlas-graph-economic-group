@@ -130,6 +130,15 @@ docker run --env-file .env.docker -p 8080:8080 atlas-graph-economic-group
 curl -fsS http://127.0.0.1:8080/health      # connection, counts, search index status
 ```
 
+Prebuilt image (published to GHCR on every push to `main` that touches the image):
+
+```bash
+docker pull ghcr.io/adrianofratelli-glitch/atlas-graph-economic-group:latest
+docker run --env-file .env.docker -p 8080:8080 ghcr.io/adrianofratelli-glitch/atlas-graph-economic-group:latest
+```
+
+Same `--env-file` rule as above (`KEY=value`, no quotes); tags: `latest` and `sha-<7-char commit>`.
+
 `docker run --env-file` does not strip quotes: write `KEY=value` with no quotes in the file you
 pass (a quoted `MONGODB_URI` reaches the driver with the quotes and fails). No `.env` and no secret go into
 the image; everything is read from the environment at runtime.
