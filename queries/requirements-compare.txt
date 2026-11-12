@@ -1,0 +1,6 @@
+# Só para queries/compare_postgres.py (não entra na imagem nem no backend).
+# pgserver traz um PostgreSQL embutido para o modo local; publica wheels até CPython 3.12.
+pgserver>=0.1.4; python_version < "3.13"
+psycopg[binary]>=3.2
+pymongo>=4.18.3,<5
+python-dotenv>=1.2.2

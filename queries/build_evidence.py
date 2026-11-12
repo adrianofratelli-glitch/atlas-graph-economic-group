@@ -209,7 +209,7 @@ def main():
               'runs': args.runs, 'environment': 'Atlas M20 compartilhado; cliente remoto; uma consulta por vez; cache aquecido',
               'mongodb_version': source.command('buildInfo')['version'],
               'production_counts': {c: source[c].estimated_document_count() for c in ('companies','ownership','credit_exposure')},
-              'comparison': {'status': 'deferred', 'alternative': 'PostgreSQL WITH RECURSIVE', 'reason': 'Ambiente comparativo adiado pelo responsável pela POV.'}}
+              'comparison': {'status': 'separate_report', 'alternative': 'PostgreSQL WITH RECURSIVE', 'report': 'evidence/comparison.json', 'source': 'queries/compare_postgres.py'}}
     ping = []
     for _ in range(args.runs):
         t = time.perf_counter(); source.command('ping'); ping.append(round((time.perf_counter()-t)*1000,3))
