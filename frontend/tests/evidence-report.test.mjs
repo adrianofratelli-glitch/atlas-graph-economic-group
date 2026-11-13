@@ -28,3 +28,21 @@ test('comparison needs runs per cell and a text-only list of what was not measur
                    {...comparison,not_measured:[{text:'x'}]}, {...comparison,not_measured:'x'}])
     assert.equal(validComparisonReport(d),false)
 })
+
+import { loadNote } from '../src/evidenceReport.js'
+test('busy run is labelled preliminary under load, with start and end',()=>{
+  const n = loadNote({host_load_average:{start:[44.8,31.9,20.2],end:[39.9,31.7,20.5]}})
+  assert.equal(n.busy,true)
+  assert.match(n.text,/Medição preliminar sob carga/)
+  assert.match(n.text,/44,8 → 39,9/)
+})
+test('missing end omits the final value instead of printing NaN',()=>{
+  const n = loadNote({host_load_average:{start:[44.8]}})
+  assert.doesNotMatch(n.text,/NaN|→/)
+  assert.match(n.text,/44,8 no início/)
+})
+test('idle run is not called preliminary, and no load data renders nothing',()=>{
+  assert.equal(loadNote({host_load_average:{start:[0.8],end:[1.1]}}).busy,false)
+  assert.equal(loadNote({}),null)
+  assert.equal(loadNote({host_load_average:{start:[]}}),null)
+})

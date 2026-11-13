@@ -37,3 +37,4 @@
 .validation-page :focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
 @media(max-width:650px) { .validation-page{padding:22px 16px 44px}.validation-card{padding:20px 14px}.validation-facts{grid-template-columns:1fr}.validation-heading{padding-top:30px}.validation-card h2{font-size:24px}.validation-chart{margin:24px -4px}.validation-meta{gap:10px}.validation-section-title label,.validation-section-title select{width:100%} }
 @media(prefers-reduced-motion:reduce){.validation-page{scroll-behavior:auto}}
+.validation-warning { padding:12px 14px; border-left:3px solid var(--warning, #ffad00); background:var(--bg-elevated, rgba(255,173,0,.06)); border-radius:6px; }
