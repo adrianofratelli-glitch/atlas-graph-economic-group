@@ -33,6 +33,7 @@ export function validComparisonReport(d) {
 }
 
 // Texto da carga da máquina durante a rodada. Sem `end`, omite o valor final.
+// O limiar vem do relatório (metade dos núcleos da máquina medida); sem ele, 2.
 const IDLE_LOAD = 2
 const load = n => new Intl.NumberFormat('pt-BR', { maximumFractionDigits: 1 }).format(n)
 export function loadNote(d) {
@@ -40,12 +41,14 @@ export function loadNote(d) {
   if (!Number.isFinite(start)) return null
   const end = d.host_load_average.end?.[0]
   const hasEnd = Number.isFinite(end)
-  const busy = start >= IDLE_LOAD || (hasEnd && end >= IDLE_LOAD)
+  const t = d.host_load_average.idle_threshold
+  const limit = Number.isFinite(t) && t > 0 ? t : IDLE_LOAD
+  const busy = start >= limit || (hasEnd && end >= limit)
   const values = hasEnd ? `${load(start)} → ${load(end)}` : `${load(start)} no início`
   return {
     busy,
     text: busy
       ? `Medição preliminar sob carga (load average de 1 min: ${values}), com outros processos na mesma máquina; as caudas com 8 clientes são as mais afetadas.`
-      : `Máquina ociosa durante a rodada (load average de 1 min: ${values}).`,
+      : `Máquina ociosa durante a rodada (load average de 1 min: ${values}, abaixo de ${load(limit)}).`,
   }
 }

@@ -427,17 +427,25 @@ def timed(fn):
     return (time.perf_counter() - t) * 1000
 
 
-IDLE_LOAD = 2.0
+def idle_load(cpus=None):
+    """Limiar de máquina ociosa: metade dos núcleos (mínimo 2).
+
+    Um valor absoluto (2) acusava carga numa máquina de 12 núcleos com 4 deles
+    ocupados; metade dos núcleos deixa folga para os dois servidores e os 8 clientes.
+    """
+    cpus = cpus if cpus is not None else (os.cpu_count() or 4)
+    return max(2.0, cpus / 2)
 
 
-def load_warnings(load):
-    """`high_load` quando o load average de 1 min chega a IDLE_LOAD no início ou no fim.
+def load_warnings(load, cpus=None):
+    """`high_load` quando o load average de 1 min chega ao limiar no início ou no fim.
 
     Com a máquina ocupada os tempos são preliminares; a correção não depende disso.
     """
+    threshold = idle_load(cpus)
     peaks = [v[0] for v in (load.get("start"), load.get("end")) if v]
-    if any(p >= IDLE_LOAD for p in peaks):
-        return [{"code": "high_load", "threshold": IDLE_LOAD, "load_average_1m": peaks,
+    if any(p >= threshold for p in peaks):
+        return [{"code": "high_load", "threshold": threshold, "load_average_1m": peaks,
                  "message": "medição preliminar sob carga; repetir com a máquina ociosa"}]
     return []
 
@@ -584,7 +592,8 @@ def main():
 
         # Outros processos na mesma máquina distorcem a cauda (sobretudo com 8
         # clientes); a carga fica registrada para quem ler o JSON.
-        result["host_load_average"] = {"start": [round(v, 1) for v in os.getloadavg()]}
+        result["host_load_average"] = {"start": [round(v, 1) for v in os.getloadavg()],
+                                       "idle_threshold": idle_load()}
         local = {}
 
         def pg_conn():

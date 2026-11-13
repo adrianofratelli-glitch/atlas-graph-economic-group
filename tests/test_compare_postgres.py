@@ -103,11 +103,17 @@ class CompareContractTests(unittest.TestCase):
         self.assertEqual(own_child, set(holdings))
 
     def test_high_load_warning_at_start_or_end(self):
-        self.assertEqual(cmp.load_warnings({"start": [0.5, 1, 1], "end": [1.9, 1, 1]}), [])
+        self.assertEqual(cmp.load_warnings({"start": [0.5, 1, 1], "end": [1.9, 1, 1]}, cpus=4), [])
         for load in ({"start": [44.8], "end": [39.9]}, {"start": [0.4], "end": [2.0]}, {"start": [3.1]}):
-            warnings = cmp.load_warnings(load)
+            warnings = cmp.load_warnings(load, cpus=4)
             self.assertEqual([w["code"] for w in warnings], ["high_load"])
         self.assertEqual(cmp.load_warnings({}), [])
+
+    def test_idle_threshold_is_half_the_cores_with_floor(self):
+        self.assertEqual(cmp.idle_load(12), 6.0)
+        self.assertEqual(cmp.idle_load(2), 2.0)
+        self.assertEqual(cmp.load_warnings({"start": [5.2], "end": [5.9]}, cpus=12), [])
+        self.assertEqual(cmp.load_warnings({"start": [5.2], "end": [6.0]}, cpus=12)[0]["threshold"], 6.0)
 
     def test_not_measured_names_the_version_gap(self):
         self.assertIn("Atlas 9.0", inspect.getsource(cmp.main))

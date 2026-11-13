@@ -43,6 +43,9 @@ test('missing end omits the final value instead of printing NaN',()=>{
 })
 test('idle run is not called preliminary, and no load data renders nothing',()=>{
   assert.equal(loadNote({host_load_average:{start:[0.8],end:[1.1]}}).busy,false)
+  assert.equal(loadNote({host_load_average:{start:[5.2],end:[5.9],idle_threshold:6}}).busy,false)
+  assert.equal(loadNote({host_load_average:{start:[5.2],end:[6.1],idle_threshold:6}}).busy,true)
+  assert.equal(loadNote({host_load_average:{start:[5.2],end:[5.9]}}).busy,true)
   assert.equal(loadNote({}),null)
   assert.equal(loadNote({host_load_average:{start:[]}}),null)
 })

@@ -3,6 +3,7 @@
 ## Unreleased
 
 - First MongoDB × PostgreSQL comparison (`queries/compare_postgres.py`): both engines local on one machine, same fixtures and 100k background companies, correctness gate before timings, per-worker warm-up; 19/19 cells identical. The evidence page renders it (section 03) and falls back to "pending" without a valid report. ADR 0004.
+- Comparison re-measured on 2026-11-13 with the machine idle (load average 4.6 → 4.1 on 12 CPUs); the preliminary label is gone. The idle threshold is now half the cores (recorded as `host_load_average.idle_threshold`) instead of a fixed 2. Same split: PostgreSQL lower p95 in 15 cells, MongoDB in the 4 largest, with 1 and 8 clients.
 - CI job `compare` runs the correctness gate with `mongo:8.2` and `postgres:16` service containers, no secrets; informative (`continue-on-error`) until its first green run.
 - ADR 0005: why name resolution and concentration do not use `$rankFusion`/`$scoreFusion`.
 - `API_BASE`, `UI_BASE` and `GRAPH_API_TARGET` let the live and browser suites run against a copy on free ports.

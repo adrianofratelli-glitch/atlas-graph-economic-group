@@ -1,5 +1,5 @@
 {
-  "measured_at": "2026-10-06T19:49:36.154Z",
+  "measured_at": "2026-11-13T15:12:27.675Z",
   "checks": [
     {
       "test": "auditoria carrega e todos os grupos são navegáveis",
@@ -10,7 +10,11 @@
       "passed": true
     },
     {
-      "test": "limite parcial e comparação pendente estão explícitos",
+      "test": "limite parcial e comparação medida estão explícitos",
+      "passed": true
+    },
+    {
+      "test": "sem comparação publicada, a seção volta a declarar pendência",
       "passed": true
     },
     {

@@ -48,30 +48,33 @@ The CI job `compare` runs the same correctness gate with `mongo:8.2` and
 informative (`continue-on-error`, 15-minute timeout), not a merge gate. Its timings
 are not published.
 
-## Result — preliminary measurement under load (2026-11-12, Apple M4 Pro, 12 CPUs)
+## Result — idle machine (2026-11-13, Apple M4 Pro, 12 CPUs)
 
-All 19 cells returned identical results. **The timings are a preliminary measurement
-under load:** other processes kept the load average at 44.8 at the start and 39.9 at
-the end (both recorded in the JSON), which inflates tails, most of all with 8
-clients. To repeat it on an idle machine, wait until `os.getloadavg()` is below
-about 2 and run `queries/compare_postgres.py --runs 100 --concurrency 1,8`; the correctness
-result does not depend on load, the timings do. Neither engine wins across the board:
+All 19 cells returned identical results. The machine was idle by the script's
+criterion: load average 4.6 at the start and 4.1 at the end, below the threshold of
+half the cores (6.0), both recorded in the JSON. This replaces the 2026-11-12 run,
+taken under load average ~40 and labelled preliminary; the
+split of wins did not change, the tails with 8 clients shrank. Neither engine wins
+across the board:
 
 | Shape | MongoDB p95, 1 / 8 clients | PostgreSQL p95, 1 / 8 clients |
 |---|---|---|
-| Trees up to 31 companies and hostile shapes (15 cells) | 1.1–1.7 / 2.5–3.4 ms, one outlier at 11.4 ms | 0.3–1.0 / 0.8–2.6 ms |
-| 4 levels × 3 children (121 companies) | 2.9 / 5.8 ms | 3.5 / 8.1 ms |
-| 6 levels × 2 children (127 companies) | 3.3 / 6.5 ms | 3.8 / 8.2 ms |
-| 6 levels × 3 children (1,093 companies) | 25.8 / 58.0 ms | 31.0 / 113.8 ms |
-| Hub, 1,200 children | 30.5 / 65.2 ms | 33.3 / 137.2 ms |
+| Trees up to 31 companies and hostile shapes (15 cells) | 1.1–1.9 / 2.4–3.3 ms | 0.3–1.0 / 1.0–2.6 ms |
+| 4 levels × 3 children (121 companies) | 3.0 / 5.5 ms | 3.4 / 8.3 ms |
+| 6 levels × 2 children (127 companies) | 3.2 / 6.2 ms | 3.7 / 8.5 ms |
+| 6 levels × 3 children (1,093 companies) | 25.9 / 35.1 ms | 31.6 / 70.0 ms |
+| Hub, 1,200 children | 29.2 / 44.9 ms | 32.9 / 81.7 ms |
 
 - **1 client:** PostgreSQL has the lower p95 in 15 of 19 cells — every group up to
-  31 companies and every hostile shape; MongoDB in the four largest (121, 127, 1,093
-  and 1,201 companies).
-- **8 clients:** the same split, 15 and 4. PostgreSQL's p95 was about twice
-  MongoDB's on the 1,093- and 1,201-company trees (113.8 × 58.0 ms, 137.2 × 65.2 ms)
-  and about 1.3–1.4× on the 121- and 127-company ones (8.1 × 5.8 ms, 8.2 × 6.5 ms). The 11.4 ms MongoDB outlier is
-  `arvore_6n_1f`, whose p50 stayed near 2 ms.
+  31 companies and every hostile shape, at about a quarter to a third of MongoDB's
+  time (0.3 × 1.3 ms on the smallest); MongoDB in the four largest (121, 127, 1,093
+  and 1,201 companies), by 13–22%.
+- **8 clients:** the same split, 15 and 4. On the small cells PostgreSQL stays at
+  about 0.4–0.5× MongoDB's p95. On the large ones the gap widens: PostgreSQL's p95
+  is 1.4–1.5× MongoDB's on the 121- and 127-company trees (8.3 × 5.5 ms, 8.5 × 6.2 ms)
+  and about twice on the 1,093- and 1,201-company ones (70.0 × 35.1 ms, 81.7 × 44.9 ms).
+- Caveat on versions: the local MongoDB is 8.2.7 Community; the demo runs on Atlas
+  9.0. Neither the Atlas version nor network latency is measured here.
 - MongoDB carries a fixed cost of about 1 ms per call in this pipeline (seven
   `$lookup`/`$graphLookup` stages, each with a sub-pipeline), visible even on a
   two-company tree. The crossover sits between 31 and 121 companies on these shapes.
