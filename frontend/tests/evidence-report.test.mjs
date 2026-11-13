@@ -22,3 +22,9 @@ test('a divergent cell stays renderable without timings: correctness failure is 
   const cell = {...comparison.cells[0],same_result:false,latency:undefined}
   assert.equal(validComparisonReport({...comparison,passed:false,cells:[cell]}),true)
 })
+test('comparison needs runs per cell and a text-only list of what was not measured',()=>{
+  for (const d of [{...comparison,method:{...comparison.method,runs_per_cell:undefined}},
+                   {...comparison,method:{...comparison.method,runs_per_cell:0}},
+                   {...comparison,not_measured:[{text:'x'}]}, {...comparison,not_measured:'x'}])
+    assert.equal(validComparisonReport(d),false)
+})

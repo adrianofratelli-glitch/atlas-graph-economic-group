@@ -30,7 +30,7 @@ function Curve({ rows }) {
 
 const CELL_LABEL = {
   hub_1200: 'Hub com 1.200 filhas', ciclo: 'Ciclo societário', participacao_cruzada: 'Participação cruzada com sócio PF',
-  profundidade_insuficiente: 'Cadeia além da profundidade', raizes_acima_do_teto: 'Raízes acima do teto',
+  profundidade_insuficiente: 'Cadeia além da profundidade', raizes_acima_do_teto: 'Raízes acima do teto', raizes_com_descendencias: 'Raízes acima do teto, descendências distintas',
   controlador_inexistente: 'Controlador fora do cadastro',
 }
 const cellLabel = c => CELL_LABEL[c] ?? c.replace(/^arvore_(\d+)n_(\d+)f$/, (_, n, f) => `Árvore · ${n} ${n === '1' ? 'nível' : 'níveis'} · ${f} ${f === '1' ? 'filho' : 'filhos'}`)
@@ -43,18 +43,18 @@ function Comparison({ d }) {
   const levels = d.method.concurrency.map(String)
   const timed = d.cells.filter(c => c.same_result)
   const p95 = (c, n, e) => c.latency[n][e].p95_ms
-  const first = levels[0]
-  const mongoLower = timed.filter(c => p95(c, first, 'mongodb') < p95(c, first, 'postgresql')).length
+  const mongoLower = n => timed.filter(c => p95(c, n, 'mongodb') < p95(c, n, 'postgresql')).length
+  const clients = n => `${n} ${n === '1' ? 'cliente' : 'clientes'}`
   return <>
     <h2>PostgreSQL: {timed.length} de {d.cells.length} células com resultado idêntico</h2>
     <p>{d.environment}. MongoDB {d.engines.mongodb} com a agregação da POV; PostgreSQL {d.engines.postgresql} com uma consulta <code>WITH RECURSIVE</code> que aplica as mesmas regras de raiz, alcance e exposição. Uma célula só recebe tempo depois que os dois devolvem as mesmas empresas, arestas, valores em centavos e motivos de alcance.</p>
-    <p>Com um cliente por vez, o p95 do MongoDB foi menor em {mongoLower} células e o do PostgreSQL em {timed.length - mongoLower}. Isso descreve esta máquina e estas formas de árvore; não é ranking de produtos.</p>
+    <p>p95 menor, por número de clientes simultâneos: {levels.map((n, i) => <span key={n}>{i ? '; ' : ''}com {clients(n)}, MongoDB em {mongoLower(n)} e PostgreSQL em {timed.length - mongoLower(n)} células</span>)}. Isso descreve esta máquina e estas formas de árvore; não é ranking de produtos.</p>
     <div className="validation-table-wrap"><table><caption>Latência ponta a ponta em ms (p50 / p95), {d.method.runs_per_cell} amostras por motor e célula</caption>
       <thead><tr><th>Forma</th><th>Empresas</th><th>Alcance</th><th>Mesmo resultado</th>{levels.map(n => <th key={'m'+n}>MongoDB · {n} {n === '1' ? 'cliente' : 'clientes'}</th>)}{levels.map(n => <th key={'p'+n}>PostgreSQL · {n} {n === '1' ? 'cliente' : 'clientes'}</th>)}</tr></thead>
       <tbody>{d.cells.map(c => <tr key={c.cell}><th>{cellLabel(c.cell)}</th><td>{number(c.returned_companies)}</td><td>{c.reasons.length ? 'Parcial declarado' : 'Completo'}</td><td className={c.same_result ? 'validation-ok' : 'validation-fail'}>{c.same_result ? 'Sim' : 'Divergente'}</td>
         {['mongodb','postgresql'].flatMap(e => levels.map(n => <td key={e+n}>{c.same_result ? `${number(c.latency[n][e].p50_ms)} / ${number(c.latency[n][e].p95_ms)}` : '—'}</td>))}</tr>)}</tbody>
     </table></div>
-    <details><summary>O que esta rodada não mede</summary><ul>{d.not_measured.map(t => <li key={t}>{t}</li>)}</ul><p>Tempos incluem o cliente Python, sem rede. Amostras individuais, tempo no servidor, carga e tamanho em disco estão no download.</p></details>
+    <details><summary>O que esta rodada não mede</summary><ul>{d.not_measured.map(t => <li key={t}>{t}</li>)}</ul>{d.host_load_average?.start && <p>Carga média da máquina (1 min) no início e no fim da rodada: {number(d.host_load_average.start[0])} e {number(d.host_load_average.end?.[0] ?? NaN)}, com outros processos ativos na mesma máquina. Caudas com 8 clientes são as mais sensíveis a isso.</p>}<p>Tempos incluem o cliente Python, sem rede. Amostras individuais, tempo no servidor, carga e tamanho em disco estão no download.</p></details>
     <p className="validation-note">Fotografia de {new Date(d.measured_at).toLocaleString('pt-BR')}. <a href="/evidence/comparison.json" download="graph-comparison.json">Baixar dados da comparação</a></p>
   </>
 }

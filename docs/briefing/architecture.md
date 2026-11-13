@@ -238,8 +238,8 @@ proxy do Vite lê `GRAPH_API_TARGET` (`frontend/vite.config.js`).
 `queries/compare_postgres.py` sobe `mongod` e um PostgreSQL embutido em diretórios
 temporários (ou usa `--mongo-uri`/`--pg-uri`, com banco PostgreSQL terminado em
 `_test`), carrega as mesmas fixtures nos dois e só cronometra uma célula depois que
-os dois devolvem o mesmo grupo. O job `compare` do `ci.yml` repete essa checagem
-com containers `mongo:8.2` e `postgres:16`. Decisão e resultado: `docs/adr/0004-first-postgresql-comparison-on-local-engines.md`.
+os dois devolvem o mesmo grupo. O job `compare` do `ci.yml` roda essa checagem
+com containers `mongo:8.2` e `postgres:16`, informativo até o primeiro verde no GitHub. Decisão e resultado: `docs/adr/0004-first-postgresql-comparison-on-local-engines.md`.
 
 `tests/test_resilience.py` não é teste unitário: cada caso corresponde a uma
 forma real de este projeto falhar na frente de um cliente, e o critério de

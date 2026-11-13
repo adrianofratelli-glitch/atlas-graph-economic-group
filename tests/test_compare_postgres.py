@@ -93,6 +93,18 @@ class CompareContractTests(unittest.TestCase):
             self.assertEqual(len({e["_id"] for e in fx["edges"]}), len(fx["edges"]))
         self.assertEqual(len(cmp.tree(6, 3, "x")["companies"]), 1093)
 
+    def test_root_choice_fixture_would_expose_a_different_choice(self):
+        # Com mais de MAX_RAIZES controladoras, cada uma com filha própria, escolher
+        # outras cinco raízes muda o conjunto devolvido.
+        fx, depth = cmp.hostile()["raizes_com_descendencias"]
+        holdings = [c["_id"] for c in fx["companies"] if c["is_holding"]]
+        self.assertGreater(len(holdings), ownership.MAX_RAIZES)
+        own_child = {e["owner_id"] for e in fx["edges"] if e["owned_id"] != fx["subject"]}
+        self.assertEqual(own_child, set(holdings))
+
+    def test_not_measured_names_the_version_gap(self):
+        self.assertIn("Atlas 9.0", inspect.getsource(cmp.main))
+
 
 if __name__ == "__main__":
     unittest.main()

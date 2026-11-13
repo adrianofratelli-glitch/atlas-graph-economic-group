@@ -118,6 +118,13 @@ def hostile():
     c = [_company(f"rai_h{i}", True) for i in range(7)] + [_company("rai_alvo")]
     out["raizes_acima_do_teto"] = ({"companies": c, "people": [], "credits": [_credit(x["_id"]) for x in c],
         "edges": [_edge(f"rai_h{i}", "rai_alvo", pct=14.0) for i in range(7)], "subject": "rai_alvo"}, 2)
+    # Sete controladoras, cada uma com uma descendência própria: quais cinco raízes
+    # entram muda o conjunto devolvido, então a escolha precisa ser a mesma nos dois.
+    c = ([_company(f"rad_h{i}", True) for i in range(7)] + [_company("rad_alvo")]
+         + [_company(f"rad_f{i}") for i in range(7)])
+    out["raizes_com_descendencias"] = ({"companies": c, "people": [], "credits": [_credit(x["_id"]) for x in c],
+        "edges": [_edge(f"rad_h{i}", "rad_alvo", pct=14.0) for i in (3, 0, 6, 1, 5, 2, 4)]
+                 + [_edge(f"rad_h{i}", f"rad_f{i}") for i in range(7)], "subject": "rad_alvo"}, 2)
     # Aresta para um controlador que não está no cadastro.
     c = [_company("orf_a"), _company("orf_b")]
     out["controlador_inexistente"] = ({"companies": c, "people": [], "credits": [_credit("orf_a")],
@@ -420,6 +427,9 @@ def timed(fn):
     return (time.perf_counter() - t) * 1000
 
 
+WARMUP_PER_WORKER = 10
+
+
 def run_cell(engines, concurrency, runs):
     """Amostras concluídas por motor; a ordem dos motores alterna a cada rodada."""
     out = {name: [] for name in engines}
@@ -428,6 +438,12 @@ def run_cell(engines, concurrency, runs):
     def worker(seed):
         local = {name: [] for name in engines}
         names = list(engines)
+        # Aquecimento em cada thread, fora da distribuição: abre a conexão
+        # PostgreSQL desta thread e passa do limiar de prepared statement
+        # (prepare_threshold=5) antes de medir; o MongoDB recebe o mesmo tratamento.
+        for _ in range(WARMUP_PER_WORKER):
+            for name in names:
+                engines[name]()
         for i in range(per_worker):
             order = names if (i + seed) % 2 == 0 else names[::-1]
             for name in order:
@@ -531,6 +547,7 @@ def main():
             },
             "not_measured": [
                 "Atlas ou PostgreSQL gerenciado, nem rede entre cliente e servidor",
+                "a versão da demonstração: aqui roda o mongod local informado em engines.mongodb, não o Atlas 9.0 da demo",
                 "carga fria (cache vazio)",
                 "base de 1,2 milhão de empresas da demonstração",
                 "concorrências 32 e 64 do protocolo",
@@ -550,6 +567,9 @@ def main():
         print("carga MongoDB…", flush=True)
         result["load"]["mongodb"] = load_mongo(mdb, data)
 
+        # Outros processos na mesma máquina distorcem a cauda (sobretudo com 8
+        # clientes); a carga fica registrada para quem ler o JSON.
+        result["host_load_average"] = {"start": [round(v, 1) for v in os.getloadavg()]}
         local = {}
 
         def pg_conn():
@@ -593,6 +613,7 @@ def main():
         mclient.drop_database(DB_NAME)
         mclient.close()
 
+    result["host_load_average"]["end"] = [round(v, 1) for v in os.getloadavg()]
     result["cells"] = rows
     result["passed"] = all(r["same_result"] for r in rows)
     Path(a.out).write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")

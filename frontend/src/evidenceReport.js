@@ -24,7 +24,8 @@ export function validComparisonReport(d) {
     Number.isFinite(Date.parse(d.measured_at)) && typeof d.environment === 'string' &&
     typeof d.engines?.mongodb === 'string' && typeof d.engines?.postgresql === 'string' &&
     Array.isArray(d.method?.concurrency) && d.method.concurrency.length && d.method.concurrency.every(finite) &&
-    Array.isArray(d.not_measured) && typeof d.passed === 'boolean' &&
+    finite(d.method?.runs_per_cell) && d.method.runs_per_cell > 0 &&
+    Array.isArray(d.not_measured) && d.not_measured.every(t => typeof t === 'string') && typeof d.passed === 'boolean' &&
     Array.isArray(d.cells) && d.cells.length && d.cells.every(c => c && typeof c.cell === 'string' &&
       typeof c.same_result === 'boolean' && finite(c.fixture_companies) && finite(c.returned_companies) &&
       Array.isArray(c.reasons) &&

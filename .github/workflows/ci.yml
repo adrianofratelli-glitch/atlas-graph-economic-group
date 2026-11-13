@@ -45,6 +45,10 @@ jobs:
   # rodada local documentada em docs/comparison-protocol.md.
   compare:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Informativo até o primeiro verde no GitHub (services e imagens ainda não
+    # validados lá); depois, retirar para virar gate.
+    continue-on-error: true
     services:
       mongo:
         image: mongo:8.2
