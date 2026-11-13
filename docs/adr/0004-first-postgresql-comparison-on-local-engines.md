@@ -54,7 +54,7 @@ All 19 cells returned identical results. **The timings are a preliminary measure
 under load:** other processes kept the load average at 44.8 at the start and 39.9 at
 the end (both recorded in the JSON), which inflates tails, most of all with 8
 clients. To repeat it on an idle machine, wait until `os.getloadavg()` is below
-about 2 and run `compare_postgres.py --runs 100 --concurrency 1,8`; the correctness
+about 2 and run `queries/compare_postgres.py --runs 100 --concurrency 1,8`; the correctness
 result does not depend on load, the timings do. Neither engine wins across the board:
 
 | Shape | MongoDB p95, 1 / 8 clients | PostgreSQL p95, 1 / 8 clients |

@@ -427,6 +427,21 @@ def timed(fn):
     return (time.perf_counter() - t) * 1000
 
 
+IDLE_LOAD = 2.0
+
+
+def load_warnings(load):
+    """`high_load` quando o load average de 1 min chega a IDLE_LOAD no início ou no fim.
+
+    Com a máquina ocupada os tempos são preliminares; a correção não depende disso.
+    """
+    peaks = [v[0] for v in (load.get("start"), load.get("end")) if v]
+    if any(p >= IDLE_LOAD for p in peaks):
+        return [{"code": "high_load", "threshold": IDLE_LOAD, "load_average_1m": peaks,
+                 "message": "medição preliminar sob carga; repetir com a máquina ociosa"}]
+    return []
+
+
 WARMUP_PER_WORKER = 10
 
 
@@ -614,6 +629,7 @@ def main():
         mclient.close()
 
     result["host_load_average"]["end"] = [round(v, 1) for v in os.getloadavg()]
+    result["warnings"] = load_warnings(result["host_load_average"])
     result["cells"] = rows
     result["passed"] = all(r["same_result"] for r in rows)
     Path(a.out).write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")

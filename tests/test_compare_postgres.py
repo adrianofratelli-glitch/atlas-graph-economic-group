@@ -102,6 +102,13 @@ class CompareContractTests(unittest.TestCase):
         own_child = {e["owner_id"] for e in fx["edges"] if e["owned_id"] != fx["subject"]}
         self.assertEqual(own_child, set(holdings))
 
+    def test_high_load_warning_at_start_or_end(self):
+        self.assertEqual(cmp.load_warnings({"start": [0.5, 1, 1], "end": [1.9, 1, 1]}), [])
+        for load in ({"start": [44.8], "end": [39.9]}, {"start": [0.4], "end": [2.0]}, {"start": [3.1]}):
+            warnings = cmp.load_warnings(load)
+            self.assertEqual([w["code"] for w in warnings], ["high_load"])
+        self.assertEqual(cmp.load_warnings({}), [])
+
     def test_not_measured_names_the_version_gap(self):
         self.assertIn("Atlas 9.0", inspect.getsource(cmp.main))
 
